@@ -38,11 +38,11 @@ public abstract class Pessoa {
         Pessoa novo = null;
 
         // Pede as informações comuns a todas as pessoas
-        String nome = Entrada.lerString("Digite o nome da pessoa: ");
-        String cpf = Entrada.lerString("Digite o CPF da pessoa: ");
-        Date dataNascimento = Entrada.lerData("Digite a data de nascimento da pessoa no formato dd/mm/yyyy: ");
-        String email = Entrada.lerString("Digite o email da pessoa: ");
-        String endereco = Entrada.lerString("Digite o endereco da pessoa: ");
+        String nome = Entrada.lerString("Digite o nome da pessoa");
+        String cpf = Entrada.lerString("Digite o CPF da pessoa");
+        Date dataNascimento = Entrada.lerData("Digite a data de nascimento da pessoa no formato dd/mm/yyyy");
+        String email = Entrada.lerString("Digite o email da pessoa");
+        String endereco = Entrada.lerString("Digite o endereco da pessoa");
 
         do {
             System.out.println("Digite o tipo de pessoa (Aluno ou Professor): ");

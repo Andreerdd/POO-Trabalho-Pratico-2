@@ -38,6 +38,40 @@ public class Entrada {
     public static final void imprimirLinha() {
         System.out.println("==================================================");
     }
+    
+    /*
+     * Lê uma string do usuário enquanto o usuário não digitar algo
+     * dentro do vetor "entradas"
+     * 
+     * @param mensagem A mensagem a ser exibida ao usuário.
+     * @param entradas Array com as strings válidas aceitas.
+     * @return A string lida do usuário.
+     */
+    public static final String lerString(String mensagem, String[] entradas) {
+        String entrada;
+        boolean entradaValida = false;
+
+        do {
+            entrada = lerString(mensagem);
+            
+            // Verifica se a entrada está no array de entradas válidas
+            for (String item : entradas) {
+                if (entrada.equalsIgnoreCase(item)) {
+                    entradaValida = true;
+                    break;
+                }
+            }
+            
+            if (!entradaValida) {
+                System.out.println("Entrada inválida. Digite uma das opções válidas:");
+                for (String item : entradas) {
+                    System.out.println(" - " + item + "\n");
+                }
+            }
+        } while (!entradaValida);
+
+        return entrada;
+    }
 
     /*
      * Lê uma string do usuário.
@@ -61,6 +95,7 @@ public class Entrada {
         // Loop para garantir que a entrada seja válida
         do {
             try {
+                System.out.print("\n: ");
                 entrada = inScanner.nextLine();
 
                 // Verifica se a entrada é válida
@@ -104,6 +139,7 @@ public class Entrada {
         // Loop para garantir que a entrada seja válida
         do {
             try {
+                System.out.println("\n: ");
                 entrada = inScanner.nextInt();
                 
                 // Se chegou aqui, a entrada é válida (nenhuma exceção)
@@ -134,11 +170,12 @@ public class Entrada {
         String entrada;
 
 
-        System.out.println("Formato (dd/mm/aaaa):");
+        System.out.println("Formato (dd/mm/aaaa) como em 13/04/1999:");
 
         // Loop para garantir que a entrada seja válida
         do {
             try {
+                System.out.println("\n: ");
                 entrada = inScanner.nextLine();
 
                 // Verifica se a entrada é válida
