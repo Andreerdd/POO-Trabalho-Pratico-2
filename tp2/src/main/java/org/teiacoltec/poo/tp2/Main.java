@@ -1,3 +1,6 @@
+/*
+ * Classe principal para execuções.
+ */
 package org.teiacoltec.poo.tp2;
 
 // Classe Date (antiga)
@@ -8,7 +11,7 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 // Imports
-import org.teiacoltec.poo.tp2.Entrada;
+import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
 import org.teiacoltec.poo.tp2.Escola.*;
 import org.teiacoltec.poo.tp2.Excecoes.*; 
 import org.teiacoltec.poo.tp2.Pessoas.*;
@@ -19,56 +22,6 @@ public class Main {
 
     // Configurações
     private static final boolean RODAR_TESTE_COMUM = false;
-
-    // Embeleza o texto (não julgue)
-    public static String embelezar(String textoFeio) {
-        String textoBonito = "";
-
-        for (int i = 0; i < textoFeio.length(); i++) {
-            // textoFeio.charAt(i) é equivalente a textoFeio[i] (em C)
-            char caractere = textoFeio.charAt(i);
-            textoBonito += caractere;
-
-            // Verifica se não está no final da string
-            if (i < textoFeio.length() - 3) {
-
-                // Verifica se é uma quebra de linha (que não está com ||)
-                if (caractere == '\n' && (textoFeio.charAt(i+1) != '|' || textoFeio.charAt(i+2) != '|')) { 
-                    // Adiciona a quebra de linha e um "|| " depois
-                    textoBonito += "||";
-                }
-            }
-        }
-
-        return textoBonito;
-    }
-
-    // Imprime as informações de uma pessoa
-    public static void imprimirInformacoes(Pessoa pessoa) {
-        String informacoes = pessoa.ObterInformacoes();
-
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
-    }
-
-    // Imprime as informações de uma turma
-    public static void imprimirInformacoes(Turma turma) {
-        String informacoes = turma.ObterInformacoes();
-
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
-    }
-
-    // Imprime as informações de uma atividade
-    public static void imprimirInformacoes(Atividade atividade) {
-        String informacoes = atividade.ObterInformacoes();
-
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
-    }
 
     // Método que mostra algumas das funcionalidades do programa
     private static void testeComum(){
@@ -105,9 +58,9 @@ public class Main {
 
         // Printa informações dos alunos
         System.out.println("\n\nInformacoes dos alunos:\n");
-        imprimirInformacoes(aluno1);
-        imprimirInformacoes(aluno2);
-        imprimirInformacoes(aluno3);
+        InterfaceDoUsuario.imprimirInformacoes(aluno1);
+        InterfaceDoUsuario.imprimirInformacoes(aluno2);
+        InterfaceDoUsuario.imprimirInformacoes(aluno3);
 
         // Cria um professor
         Pessoa professor1 = new Professor(
@@ -131,8 +84,8 @@ public class Main {
         );
 
         System.out.println("\n\nInformacoes dos professores:\n");
-        imprimirInformacoes(professor1);
-        imprimirInformacoes(professor2);
+        InterfaceDoUsuario.imprimirInformacoes(professor1);
+        InterfaceDoUsuario.imprimirInformacoes(professor2);
 
         // Cria turmas e subturmas
         Turma turma10 = new Turma(
@@ -201,16 +154,16 @@ public class Main {
         System.out.println("\n\nInformacoes das turmas:\n");
 
         // Mostra informações da turma 10
-        imprimirInformacoes(turma10);
+        InterfaceDoUsuario.imprimirInformacoes(turma10);
 
         // Mostra informações da turma 10-1
-        imprimirInformacoes(turma10_1);
+        InterfaceDoUsuario.imprimirInformacoes(turma10_1);
 
         // Mostra informações da turma 10-1-1
-        imprimirInformacoes(turma10_1_1);
+        InterfaceDoUsuario.imprimirInformacoes(turma10_1_1);
 
         // Mostra informações da turma 20
-        imprimirInformacoes(turma20);
+        InterfaceDoUsuario.imprimirInformacoes(turma20);
 
         // Cria atividades
         Atividade atividade1 = new Atividade(
@@ -242,9 +195,9 @@ public class Main {
 
         // Printa informações das atividades
         System.out.println("\n\nInformacoes das atividades:\n");
-        imprimirInformacoes(atividade1);
-        imprimirInformacoes(atividade2);
-        imprimirInformacoes(atividade3);
+        InterfaceDoUsuario.imprimirInformacoes(atividade1);
+        InterfaceDoUsuario.imprimirInformacoes(atividade2);
+        InterfaceDoUsuario.imprimirInformacoes(atividade3);
 
         // Remove o aluno 1 da turma 10
         System.out.println("\n\nRemovendo aluno 1 da turma 10...\n");
@@ -263,46 +216,14 @@ public class Main {
         }
 
         // Printa informações da turma 10
-        imprimirInformacoes(turma10);
+        InterfaceDoUsuario.imprimirInformacoes(turma10);
 
         // Altera a descrição da turma 10
         System.out.println("\n\nAlterando a descrição da turma 10...\n");
         turma10.setDescricao("Turma 10 demais!! Eletronica acima de tudo!!\n\tAgora com menos alunos! Ou seja, mais espaco para voce!!");
 
         // Printa informações da turma 10
-        imprimirInformacoes(turma10);
-    }
-
-    // Valor mínimo e máximo da entrada
-    private static final int ENTRADA_MIN = 0;
-    private static final int ENTRADA_MAX = 4;
-
-    // Espera e retorna a entrada do usuário
-    private static int esperarEntrada() {
-        int opcaoEscolhida;
-
-        // Printa as opções
-        System.out.println("""
-            Opcoes:
-            0 - Sair
-
-            == Pessoas ==
-            1 - Criar pessoa
-
-            """);
-
-        try {
-            opcaoEscolhida = Entrada.lerInteiro();
-            if (opcaoEscolhida < ENTRADA_MIN || opcaoEscolhida > ENTRADA_MAX) {
-                throw new InputMismatchException("Digite uma opcao valida");
-            }
-        } catch (InputMismatchException e) {
-            System.out.println("Erro: " + e.getMessage());
-            Entrada.esperaEnter();
-            opcaoEscolhida = Entrada.ENTRADA_INVALIDA;
-        }
-
-        return opcaoEscolhida;
+        InterfaceDoUsuario.imprimirInformacoes(turma10);
     }
     
     public static void main(String[] args) {
@@ -312,31 +233,6 @@ public class Main {
         if (RODAR_TESTE_COMUM) testeComum();
 
         // Loop principal do programa
-        int opcao;
-        do {
-            Entrada.imprimirLinha();
-            opcao = esperarEntrada();
-
-            // Ação da opção
-            switch (opcao) {
-                case 1:
-                    Pessoa pessoa = Pessoa.criarPessoa();
-                    System.out.println("Pessoa criada com as informacoes:\n");
-                    imprimirInformacoes(pessoa);
-
-                    Entrada.imprimirLinha();
-                    Entrada.esperaEnter();
-                    
-                    break;
-
-                case 0:
-                    System.out.println("Saiu do programa.");
-                case Entrada.ENTRADA_INVALIDA:
-                    // Não precisa de printar que digitou errado,
-                    // a função já printa isso!
-                    break;
-            }
-        } while (opcao != Entrada.ENTRADA_SAIR);
-
+        InterfaceDoUsuario.MenuPrincipal();
     }
 }

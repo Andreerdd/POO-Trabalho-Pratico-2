@@ -12,7 +12,6 @@ package org.teiacoltec.poo.tp2;
 import org.teiacoltec.poo.tp2.Utils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -62,8 +61,9 @@ public class Entrada {
                 }
             }
             
+            // Se chegou até aqui, é porque a entrada é inválida
             if (!entradaValida) {
-                System.out.println("Entrada inválida. Digite uma das opções válidas:");
+                System.out.println("Entrada inválida. Digite uma das opções válidas:\n");
                 for (String item : entradas) {
                     System.out.println(" - " + item + "\n");
                 }

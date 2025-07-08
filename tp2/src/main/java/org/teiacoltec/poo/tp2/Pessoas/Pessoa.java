@@ -40,7 +40,7 @@ public abstract class Pessoa {
         // Pede as informações comuns a todas as pessoas
         String nome = Entrada.lerString("Digite o nome da pessoa");
         String cpf = Entrada.lerString("Digite o CPF da pessoa");
-        Date dataNascimento = Entrada.lerData("Digite a data de nascimento da pessoa no formato dd/mm/yyyy");
+        Date dataNascimento = Entrada.lerData("Digite a data de nascimento da pessoa");
         String email = Entrada.lerString("Digite o email da pessoa");
         String endereco = Entrada.lerString("Digite o endereco da pessoa");
 
