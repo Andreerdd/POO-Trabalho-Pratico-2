@@ -1,8 +1,10 @@
 package org.teiacoltec.poo.tp2.Pessoas;
 
-import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat; // Classe SimpleDateFormat (para formatar a data)
 import java.util.Date; // Classe Date
-import org.teiacoltec.poo.tp2.Main; // Classe SimpleDateFormat (para formatar a data)
+
+// Imports
+import org.teiacoltec.poo.tp2.Entrada; 
 
 public abstract class Pessoa {
     private String CPF;
@@ -35,9 +37,16 @@ public abstract class Pessoa {
     public static Pessoa criarPessoa() {
         Pessoa novo = null;
 
+        // Pede as informações comuns a todas as pessoas
+        String nome = Entrada.lerString("Digite o nome da pessoa: ");
+        String cpf = Entrada.lerString("Digite o CPF da pessoa: ");
+        Date dataNascimento = Entrada.lerData("Digite a data de nascimento da pessoa no formato dd/mm/yyyy: ");
+        String email = Entrada.lerString("Digite o email da pessoa: ");
+        String endereco = Entrada.lerString("Digite o endereco da pessoa: ");
+
         do {
             System.out.println("Digite o tipo de pessoa (Aluno ou Professor): ");
-            String tipoDePessoa = Main.inScanner.nextLine();
+            String tipoDePessoa = Entrada.inScanner.nextLine();
 
             switch (tipoDePessoa) {
                 case "Aluno" -> novo = (Pessoa) Aluno.criarAluno();

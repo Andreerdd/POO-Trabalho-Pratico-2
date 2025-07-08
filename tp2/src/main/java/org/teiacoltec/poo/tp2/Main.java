@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 // Imports
+import org.teiacoltec.poo.tp2.Entrada;
 import org.teiacoltec.poo.tp2.Escola.*;
 import org.teiacoltec.poo.tp2.Excecoes.*; 
 import org.teiacoltec.poo.tp2.Pessoas.*;
@@ -18,19 +19,6 @@ public class Main {
 
     // Configurações
     private static final boolean RODAR_TESTE_COMUM = false;
-
-    // Constantes
-    private static final int ENTRADA_INVALIDA = -1;
-    private static final int ENTRADA_SAIR = 0;
-
-    public static final Scanner inScanner = new Scanner(System.in);
-
-    // Espera o usuário dar enter para continuar
-    public static void esperaEnter() {
-        inScanner.nextLine(); // Limpa o buffer
-        System.out.println("Pressione Enter para continuar...");
-        inScanner.nextLine();
-    }
 
     // Embeleza o texto (não julgue)
     public static String embelezar(String textoFeio) {
@@ -304,14 +292,14 @@ public class Main {
             """);
 
         try {
-            opcaoEscolhida = inScanner.nextInt();
+            opcaoEscolhida = Entrada.lerInteiro();
             if (opcaoEscolhida < ENTRADA_MIN || opcaoEscolhida > ENTRADA_MAX) {
                 throw new InputMismatchException("Digite uma opcao valida");
             }
         } catch (InputMismatchException e) {
             System.out.println("Erro: " + e.getMessage());
-            esperaEnter();
-            opcaoEscolhida = ENTRADA_INVALIDA;
+            Entrada.esperaEnter();
+            opcaoEscolhida = Entrada.ENTRADA_INVALIDA;
         }
 
         return opcaoEscolhida;
@@ -323,26 +311,32 @@ public class Main {
         // caso o usuário queira.
         if (RODAR_TESTE_COMUM) testeComum();
 
-        // A variável vai ser sobrescrita de qualquer forma
+        // Loop principal do programa
         int opcao;
-
         do {
+            Entrada.imprimirLinha();
             opcao = esperarEntrada();
 
             // Ação da opção
             switch (opcao) {
                 case 1:
+                    Pessoa pessoa = Pessoa.criarPessoa();
+                    System.out.println("Pessoa criada com as informacoes:\n");
+                    imprimirInformacoes(pessoa);
+
+                    Entrada.imprimirLinha();
+                    Entrada.esperaEnter();
                     
                     break;
 
                 case 0:
                     System.out.println("Saiu do programa.");
-                case ENTRADA_INVALIDA:
+                case Entrada.ENTRADA_INVALIDA:
                     // Não precisa de printar que digitou errado,
                     // a função já printa isso!
                     break;
             }
-        } while (opcao != ENTRADA_SAIR);
+        } while (opcao != Entrada.ENTRADA_SAIR);
 
     }
 }
