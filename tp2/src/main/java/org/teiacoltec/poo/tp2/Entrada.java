@@ -9,12 +9,16 @@
 
 package org.teiacoltec.poo.tp2;
 
+import org.teiacoltec.poo.tp2.Utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Entrada {
-    // Constantes
+    // Constantes //
     public static final int ENTRADA_INVALIDA = -1; // Se a pessoa digitou algo inválido
     public static final int ENTRADA_SAIR = 0;      // Opção que o usuário deve digitar para sair de algo
 
@@ -129,6 +133,9 @@ public class Entrada {
         Date data;
         String entrada;
 
+
+        System.out.println("Formato (dd/mm/aaaa):");
+
         // Loop para garantir que a entrada seja válida
         do {
             try {
@@ -141,15 +148,10 @@ public class Entrada {
                     continue;
                 }
 
-                // Quebra a entrada em dia, mes e ano
-                String[] partes = entrada.split("/");
-                int dia = Integer.parseInt(partes[0]);
-                int mes = Integer.parseInt(partes[1]);
-                int ano = Integer.parseInt(partes[2]) - 1900; // para compensar
-                data = new Date(ano, mes, dia);
+                data = Utils.formatarData(entrada);
                 break;
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada invalida. Tente novamente.");
+            } catch (InputMismatchException | ParseException e) {
+                System.out.println("Entrada invalida. Tente novamente.\nMensagem de erro: " + e.getMessage());
             }
         } while (true);
 
