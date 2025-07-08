@@ -23,7 +23,7 @@ public class Aluno extends Pessoa {
     }
 
     public static Aluno criarAluno() {
-        Aluno novo;
+        Aluno novo = new Aluno(null, null, null, null, null, null, null);
 
         // Obter as informações
 
