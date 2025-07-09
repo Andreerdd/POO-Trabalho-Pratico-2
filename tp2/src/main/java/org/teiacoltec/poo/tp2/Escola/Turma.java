@@ -11,6 +11,7 @@ import java.util.HashMap; // Classe HashMap (para armazenar atividades)
 import java.util.ArrayList; // Classe ArrayList (para armazenar atividades)
 
 // Imports
+import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
@@ -133,9 +134,6 @@ public class Turma {
         turma.setTurmaPai(this);
     }
 
-    public Turma getTurmaPai() {
-        return this.Turma_Pai;
-    }
 
     // Obtém as informações da turma
     public String ObterInformacoes() {
@@ -282,5 +280,9 @@ public class Turma {
     public ArrayList<Turma> getTurmasFilhas() {
         return this.Turmas_Filhas;
     }
-    
+
+    public Turma getTurmaPai() {
+        return this.Turma_Pai;
+    }
+
 }

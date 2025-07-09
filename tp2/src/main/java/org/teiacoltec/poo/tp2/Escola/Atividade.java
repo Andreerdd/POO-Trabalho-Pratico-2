@@ -1,24 +1,48 @@
+/*
+ * Classe responsável por representar uma atividade.
+ */
 package org.teiacoltec.poo.tp2.Escola;
 
+
+import java.util.HashMap; // Classe HashMap (para armazenar atividades)
 import java.text.SimpleDateFormat; // Classe Date
 import java.util.Date; // Classe SimpleDateFormat (para formatar a data)
 
+// Imports
+import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
+
 public class Atividade {
-    
-    private int ID;
+    // Mapa de todas as atividades existentes
+    private static final HashMap<String, Atividade> Atividades = new HashMap<>();
+
+    private final int ID;
     private String Nome;
     private String Descricao;
     private Date Inicio;
     private Date Fim;
-    private float Pontos;
+    private float valor;
 
-    public Atividade(int id, String nome, String descricao, Date inicio, Date fim, float pontos) {
+    public Atividade(int id, String nome, String descricao, Date inicio, Date fim, float valor) {
         this.ID = id;
         this.Nome = nome;
         this.Descricao = descricao;
         this.Inicio = inicio;
         this.Fim = fim;
-        this.Pontos = pontos;
+        this.valor = valor;
+    }
+
+    /*
+     * Obtém uma atividade pelo ID dela.
+     *
+     * @param id O ID da atividade a ser obtida.
+     * @return A atividade correspondente ao ID.
+     */
+    public Atividade obtemAtividadePorId(String id) throws AtividadeNaoEncontradaException {
+        // Verifica se a atividade existe
+        if (this.atividades.containsKey(id)) return this.atividades.get(id);
+
+        // Se chegou até aqui, é porque a atividade não foi encontrada
+        throw new AtividadeNaoEncontradaException("Nao encontrou a atividade na lista da turma " + this.getNome(), id);
     }
 
     // Obtém as informações da atividade
@@ -32,7 +56,7 @@ public class Atividade {
         return   "|| Atividade: " + this.Nome 
              + "\n|| ID: " + this.ID
              + "\n|| Descricao:\n\t" + this.Descricao
-             + "\n|| Pontos: " + this.Pontos
+             + "\n|| Valor: " + this.valor
              + "\n|| Data de Inicio: " + inicioFormatado 
              + "\n|| Data de Fim: " + fimFormatado;
     }
@@ -54,8 +78,8 @@ public class Atividade {
         this.Fim = fim;
     }
 
-    public void setPontos(float pontos) {
-        this.Pontos = pontos;
+    public void setPontos(float valor) {
+        this.valor = valor;
     }
 
     // Gets
@@ -76,7 +100,7 @@ public class Atividade {
     }
 
     public float getPontos() {
-        return this.Pontos;
+        return this.valor;
     }
 
     public int getId() {
