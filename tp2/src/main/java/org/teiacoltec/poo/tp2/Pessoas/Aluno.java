@@ -1,6 +1,8 @@
 package org.teiacoltec.poo.tp2.Pessoas;
 
 import java.util.Date;
+
+import org.teiacoltec.poo.tp2.Entrada;
 import org.teiacoltec.poo.tp2.Main;
 
 public class Aluno extends Pessoa {
@@ -22,10 +24,19 @@ public class Aluno extends Pessoa {
             + "\n|| Curso: " + this.Curso;
     }
 
-    public static Aluno criarAluno() {
+    /*
+     * Cria um novo aluno
+     * 
+     * @return o aluno criado 
+     */
+    public static Aluno criarAluno(String cpf, String nome, Date nascimento, String email, String endereco) {
         Aluno novo;
 
-        // Obter as informações
+        // Obtém as informações & cria um novo aluno
+        String matricula = Entrada.lerString("Matricula do aluno");
+        String curso = Entrada.lerString("Curso do aluno");
+
+        novo = new Aluno(cpf, nome, nascimento, email, endereco, matricula, curso);
 
         // Retorna o aluno criado
         return novo;

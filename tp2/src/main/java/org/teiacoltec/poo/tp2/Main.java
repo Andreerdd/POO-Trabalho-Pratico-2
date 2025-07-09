@@ -16,8 +16,6 @@ import org.teiacoltec.poo.tp2.Escola.*;
 import org.teiacoltec.poo.tp2.Excecoes.*; 
 import org.teiacoltec.poo.tp2.Pessoas.*;
 
-
-
 public class Main {
 
     // Configurações

@@ -12,6 +12,7 @@ public abstract class Pessoa {
     private Date Nascimento; 
     private String Email;
     private String Endereco;
+    private static final String[] tiposDePessoas = new String[]{"Aluno", "Professor"}; // para o código ficar mais bonito
     
     public Pessoa(String cpf, String nome, Date nascimento, String email, String endereco) {
         this.CPF = cpf;
@@ -45,12 +46,13 @@ public abstract class Pessoa {
         String endereco = Entrada.lerString("Digite o endereco da pessoa");
 
         do {
-            System.out.println("Digite o tipo de pessoa (Aluno ou Professor): ");
-            String tipoDePessoa = Entrada.inScanner.nextLine();
+            String tipoDePessoa = Entrada.lerString("Digite o tipo de pessoa (Aluno ou Professor)", tiposDePessoas);
 
             switch (tipoDePessoa) {
-                case "Aluno" -> novo = (Pessoa) Aluno.criarAluno();
-                default -> System.out.println("Erro na criacao de uma pessoa.");
+                case "Aluno":
+                    novo = (Pessoa) Aluno.criarAluno(cpf, nome, dataNascimento, email, endereco);
+                    break;
+                default: System.out.println("Tipo de pessoa invalido. Isso nao deveria acontecer!");
             }
         }
         while (novo == null);

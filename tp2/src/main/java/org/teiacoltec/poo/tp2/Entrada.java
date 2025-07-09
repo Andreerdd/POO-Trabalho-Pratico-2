@@ -9,12 +9,14 @@
 
 package org.teiacoltec.poo.tp2;
 
-import org.teiacoltec.poo.tp2.Utils;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+// Imports
+import org.teiacoltec.poo.tp2.Utils;
+import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
 
 public class Entrada {
     // Constantes //
@@ -28,14 +30,12 @@ public class Entrada {
      * Espera o usuário dar enter para continuar.
      */
     public static final void esperaEnter() {
-        Entrada.lerString("Pressione Enter para continuar...");
-    }
-
-    /*
-     * Imprime uma linha de igual.
-     */
-    public static final void imprimirLinha() {
-        System.out.println("==================================================");
+        System.out.println("Pressione Enter para continuar...");
+        
+        // A função lerString() é preparada para NÃO ler uma string vazia,
+        // o que acontece aqui. Por isso, usei essa linha abaixo ao invés
+        // da função supracitada.
+        inScanner.nextLine();
     }
     
     /*
@@ -80,7 +80,7 @@ public class Entrada {
      * @return A string lida do usuário.
      */
     public static final String lerString(String mensagem) {
-        System.out.println(mensagem);
+        System.out.print(mensagem);
         return lerString();
     }
 
@@ -108,7 +108,7 @@ public class Entrada {
                 // Se chegou aqui, a entrada é válida (nenhuma exceção && não é vazia)
                 break;
             } catch (InputMismatchException e) {
-                System.out.println("Entrada invalida. Tente novamente.");
+                System.out.println("Entrada invalida. Tente novamente.\nMensagem de erro: " + e.getMessage());
             }
         } while (true);
 
@@ -124,7 +124,7 @@ public class Entrada {
      * @return O inteiro lido do usuário.
      */
     public static final int lerInteiro(String mensagem) {
-        System.out.println(mensagem);
+        System.out.print(mensagem);
         return lerInteiro();
     }
 
@@ -139,13 +139,13 @@ public class Entrada {
         // Loop para garantir que a entrada seja válida
         do {
             try {
-                System.out.println("\n: ");
-                entrada = inScanner.nextInt();
-                
+                System.out.print("\n: ");
+                String strEntrada = inScanner.nextLine();
+                entrada = Integer.parseInt(strEntrada);
                 // Se chegou aqui, a entrada é válida (nenhuma exceção)
                 break;
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada invalida. Tente novamente.");
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.println("Entrada invalida. Tente novamente.\nMensagem de erro: " + e.getMessage());
                 esperaEnter();
             }
         } while (true);
@@ -161,7 +161,7 @@ public class Entrada {
      * @return A data lida do usuário.
      */
     public static final Date lerData(String mensagem) {
-        System.out.println(mensagem);
+        System.out.print(mensagem);
         return lerData();
     }
 
@@ -170,12 +170,12 @@ public class Entrada {
         String entrada;
 
 
-        System.out.println("Formato (dd/mm/aaaa) como em 13/04/1999:");
+        System.out.print("\t\t(Formato (dd/mm/aaaa) como em 13/04/1999)");
 
         // Loop para garantir que a entrada seja válida
         do {
             try {
-                System.out.println("\n: ");
+                System.out.print("\n: ");
                 entrada = inScanner.nextLine();
 
                 // Verifica se a entrada é válida

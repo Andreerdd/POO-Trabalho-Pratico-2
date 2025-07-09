@@ -8,6 +8,7 @@ package org.teiacoltec.poo.tp2;
 import java.util.InputMismatchException;
 
 // Imports
+import org.teiacoltec.poo.tp2.Utils;
 import org.teiacoltec.poo.tp2.Sistema;
 import org.teiacoltec.poo.tp2.Pessoas.Pessoa;
 import org.teiacoltec.poo.tp2.Escola.*;
@@ -18,7 +19,6 @@ public class InterfaceDoUsuario {
     private static final int ENTRADA_MIN = 0;
     private static final int ENTRADA_MAX = 4;
 
-
     /*
      * Loop que mostrará o menu e irá interagir com
      * o usuário.
@@ -26,7 +26,7 @@ public class InterfaceDoUsuario {
     public static final void MenuPrincipal() {
         int opcao;
         do {
-            Entrada.imprimirLinha();
+            imprimirLinha();
             opcao = esperarEntrada();
 
             // Ação da opção
@@ -37,7 +37,7 @@ public class InterfaceDoUsuario {
                     System.out.println("Pessoa criada com as informacoes:\n");
                     imprimirInformacoes(pessoa);
 
-                    Entrada.imprimirLinha();
+                    imprimirLinha();
                     Entrada.esperaEnter();
                     
                     break;
@@ -53,34 +53,6 @@ public class InterfaceDoUsuario {
     }
 
     /*
-     * Embeleza o texto recebido.
-     * 
-     * @param textoFeio texto sem formatação (muito feio)
-     * @return texto com formatação (bonito demais)
-     */
-    public static String embelezar(String textoFeio) {
-        String textoBonito = "";
-
-        for (int i = 0; i < textoFeio.length(); i++) {
-            // textoFeio.charAt(i) é equivalente a textoFeio[i] (em C)
-            char caractere = textoFeio.charAt(i);
-            textoBonito += caractere;
-
-            // Verifica se não está no final da string
-            if (i < textoFeio.length() - 3) {
-
-                // Verifica se é uma quebra de linha (que não está com ||)
-                if (caractere == '\n' && (textoFeio.charAt(i+1) != '|' || textoFeio.charAt(i+2) != '|')) { 
-                    // Adiciona a quebra de linha e um "|| " depois
-                    textoBonito += "||";
-                }
-            }
-        }
-
-        return textoBonito;
-    }
-
-    /*
      * Imprime as informações de uma pessoa.
      * 
      * @param pessoa pessoa que as informações serão impressas.
@@ -88,9 +60,9 @@ public class InterfaceDoUsuario {
     public static void imprimirInformacoes(Pessoa pessoa) {
         String informacoes = pessoa.ObterInformacoes();
 
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
+        imprimirLinha();
+        System.out.println(Utils.embelezar(informacoes));
+        imprimirLinha();
     }
 
     /*
@@ -101,9 +73,9 @@ public class InterfaceDoUsuario {
     public static void imprimirInformacoes(Turma turma) {
         String informacoes = turma.ObterInformacoes();
 
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
+        imprimirLinha();
+        System.out.println(Utils.embelezar(informacoes));
+        imprimirLinha();
     }
 
     /*
@@ -114,9 +86,16 @@ public class InterfaceDoUsuario {
     public static void imprimirInformacoes(Atividade atividade) {
         String informacoes = atividade.ObterInformacoes();
 
-        System.out.println("\n================================================================\n" 
-                           + embelezar(informacoes) 
-                         + "\n================================================================");
+        imprimirLinha();
+        System.out.println(Utils.embelezar(informacoes));
+        imprimirLinha();
+    }
+
+    /*
+     * Imprime uma linha de igual.
+     */
+    public static final void imprimirLinha() {
+        System.out.println("==================================================");
     }
 
     /*
@@ -134,7 +113,6 @@ public class InterfaceDoUsuario {
 
             == Pessoas ==
             1 - Criar pessoa
-
             """);
 
         try {
