@@ -7,12 +7,15 @@ import java.util.Date; // Classe Date
 import org.teiacoltec.poo.tp2.Entrada; 
 
 public abstract class Pessoa {
+    // Para o código ficar mais bonito
+    private static final String[] tiposDePessoas = new String[]{"Aluno", "Professor"};
+    
     private String CPF;
     private String Nome;
     private Date Nascimento; 
     private String Email;
     private String Endereco;
-    private static final String[] tiposDePessoas = new String[]{"Aluno", "Professor"}; // para o código ficar mais bonito
+    
     
     public Pessoa(String cpf, String nome, Date nascimento, String email, String endereco) {
         this.CPF = cpf;
@@ -58,6 +61,12 @@ public abstract class Pessoa {
         while (novo == null);
 
         return novo;
+    }
+
+    // Sobrescreve o método equals
+    public boolean equals(Pessoa pessoa) {
+        // Verifica se tem o mesmo CPF
+        return pessoa.getCPF().equals(this.getCPF());
     }
 
     // Sets  

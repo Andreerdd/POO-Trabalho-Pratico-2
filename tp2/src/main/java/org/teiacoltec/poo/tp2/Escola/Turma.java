@@ -1,9 +1,16 @@
+/*
+ * Classe que representa uma turma.
+ */
+
 package org.teiacoltec.poo.tp2.Escola;
 
 import java.text.SimpleDateFormat; // Classe Date
 import java.util.Arrays; // Classe Arrays
 import java.util.Date; // Classe SimpleDateFormat (para formatar a data)
+import java.util.HashMap; // Classe HashMap (para armazenar atividades)
+import java.util.ArrayList; // Classe ArrayList (para armazenar atividades)
 
+// Imports
 import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
@@ -17,9 +24,10 @@ public class Turma {
     private String Descricao;
     private Date Inicio;
     private Date Fim;
-    private Pessoa[] Participantes;
+    private final ArrayList<Pessoa> Participantes = new ArrayList<>();
     private Turma Turma_Pai;
-    private Turma[] Turmas_Filhas;
+    private final ArrayList<Turma> Turmas_Filhas = new ArrayList<>();
+    private final HashMap<String, Atividade> atividades = new HashMap<>();
 
     public Turma(int id, String nome, String descricao, Date inicio, Date fim) {
         this.ID = id;
@@ -31,31 +39,26 @@ public class Turma {
 
     private int procurarPessoa(Pessoa pessoa) throws PessoaNaoEncontradaException {
         // Verifica se o vetor está vazio
-        if (Participantes == null) throw new PessoaNaoEncontradaException(pessoa.getNome(), this.Nome);
+        if (Participantes.isEmpty()) throw new PessoaNaoEncontradaException(pessoa.getNome(), this.Nome);
 
         // Tenta procurar a pessoa no vetor
-        for (int pos = 0; pos < Participantes.length; pos++) {
-            if (Participantes[pos] == pessoa) { // Aqui, eu poderia verificar pelo CPF também (já que é único)
-                return pos;
-            }
-        }
+        int pos = Participantes.indexOf(pessoa);
+        if (pos != -1) return pos; // Encontrou a pessoa
 
         // Se chegou até aqui, a pessoa não está na turma
         throw new PessoaNaoEncontradaException(pessoa.getNome(), this.Nome);
     }
 
-    public Pessoa[] obtemListaParticipantes() {
+    public ArrayList<Pessoa> obtemListaParticipantes() {
         return this.Participantes;
     }
 
     // Adiciona um participante a lista de participantes
     public void adicionarParticipante(Pessoa participante) throws PessoaJaParticipanteException {
-        // Verifica se o vetor está vazio
-        if (this.Participantes == null) {
+        // Verifica se está vazio
+        if (this.Participantes.isEmpty()) {
             // Cria o primeiro participante
-            this.Participantes = new Pessoa[1];
-            this.Participantes[0] = participante;
-
+            this.Participantes.add(participante);
             return;
         }
 
@@ -65,20 +68,11 @@ public class Turma {
         }
 
         // Se chegou até aqui, é porque a pessoa não está na turma. Então, adiciona ela
-
-        // Copia o vetor com mais um espaço
-        Pessoa[] novoVetor = Arrays.copyOfRange(this.Participantes, 0, this.Participantes.length + 1);
-
-        // Adiciona o novo participante ao vetor
-        novoVetor[novoVetor.length - 1] = participante;
-
-        // Atualiza a lista de participantes
-        this.Participantes = novoVetor;
-
-
+        this.Participantes.add(participante);
     }
 
     public void removerParticipante(Pessoa participante) throws PessoaNaoEncontradaException {
+        // Verifica se a pessoa está na turma
         int pos;
         try {
             pos = procurarPessoa(participante);     
@@ -86,21 +80,12 @@ public class Turma {
             throw new PessoaNaoEncontradaException(participante.getNome(), this.Nome);
         }
 
-        Pessoa[] antes = Arrays.copyOfRange(Participantes, 0, pos);
-        Pessoa[] depois = Arrays.copyOfRange(Participantes, pos+1, Participantes.length);
-        Pessoa[] novoVetor = new Pessoa[antes.length + depois.length]; // ou Participantes.length - 1
-        for (int i = 0; i < antes.length; i++) {
-            novoVetor[i] = antes[i];
-        }
-        for (int i = 0; i < depois.length; i++) {
-            novoVetor[antes.length + i] = depois[i];
-        }
-
-        this.Participantes = novoVetor;
+        // Remove o participante da lista de participantes
+        this.Participantes.remove(pos);
 
         // Retira o participante das turmas filhas (se houver turma filha e
         // se o participante estiver em alguma turma filha)
-        if (this.Turmas_Filhas != null) {
+        if (!this.Turmas_Filhas.isEmpty()) {
             for (Turma turma : this.Turmas_Filhas) {
                 try {
                     turma.removerParticipante(participante);
@@ -124,13 +109,13 @@ public class Turma {
   
     public void associaSubturma(Turma turma) throws TurmaJaEstaAssociadaException {
         // Verifica se o vetor está vazio
-        if (this.Turmas_Filhas == null) {
-            this.Turmas_Filhas = new Turma[1];
-            this.Turmas_Filhas[0] = turma;
+        if (this.Participantes.isEmpty()) {
+            this.Turmas_Filhas.add(turma);
 
-            // Coloca a turma pai da subturma como a turma atual
+            // Coloca a turma pai da sub turma como a turma atual
             turma.setTurmaPai(this);
 
+            // Para o código aqui, pois não há mais o que fazer
             return;
         }
 
@@ -141,17 +126,11 @@ public class Turma {
             }
         }
 
-        // Copia o vetor com mais um espaço
-        Turma[] novoVetor = Arrays.copyOfRange(this.Turmas_Filhas, 0, this.Turmas_Filhas.length + 1);
+        // Adiciona a nova turma
+        this.Turmas_Filhas.add(turma);
 
-        // Adiciona a nova turma ao vetor
-        novoVetor[novoVetor.length - 1] = turma;
-
-        // Coloca a turma pai da subturma como a turma atual
+        // Coloca a turma pai da sub turma como a turma atual
         turma.setTurmaPai(this);
-
-        // Atualiza a lista de turmas filhas
-        this.Turmas_Filhas = novoVetor;
     }
 
     public Turma getTurmaPai() {
@@ -160,46 +139,54 @@ public class Turma {
 
     // Obtém as informações da turma
     public String ObterInformacoes() {
-        String resultado = "";
-
         // Formata a data de nascimento
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         String inicioFormatado = formato.format(this.Inicio);
         String fimFormatado = formato.format(this.Fim);
 
-        // Obtém as informações básicas da turma
-        resultado +=   "|| Turma: " + this.Nome 
-                   + "\n|| ID: " + this.ID
-                   + "\n|| Descricao:\n\t" + this.Descricao
-                   + "\n|| Data de Inicio: " + inicioFormatado 
-                   + "\n|| Data de Fim: " + fimFormatado;
+        String resultado = """
+                || Turma: %s
+                || ID: %d
+                || Descricao:
+                	%s
+                || Data de Inicio: %s
+                || Data de Fim: %s""".formatted(this.Nome, this.ID, this.Descricao, inicioFormatado, fimFormatado);
 
         // Obtém algumas informações da turma pai (se existir)
         if (this.Turma_Pai != null) {
-            resultado += "\n--------------------" 
-                       + "\n|| Nome da turma pai: " + this.Turma_Pai.getNome() 
-                       + "\n|| ID da turma pai: " + this.Turma_Pai.getId();
-            
+            resultado += """
+                    
+                    --------------------
+                    || Nome da turma pai: %s
+                    || ID da turma pai: %d""".formatted(this.Turma_Pai.getNome(), this.Turma_Pai.getId());
+
         } else {
-            resultado += "\n--------------------" 
-                       + "\n|| Nao possui turma pai";
+            resultado += """
+                    
+                    --------------------
+                    || Nao possui turma pai""";
         }
 
         // Obtém algumas informações das turmas filhas (se houver)
-        if (this.Turmas_Filhas != null) {
+        if (!this.Turmas_Filhas.isEmpty()) {
             String turmasFilhas = "";
 
-            for (Turma turmaFilha : this.Turmas_Filhas) turmasFilhas += "\n||\t" + turmaFilha.getNome() + " (ID: " + turmaFilha.getId() + ")";
+            for (Turma turmaFilha : this.Turmas_Filhas)
+                turmasFilhas += "\n||\t" + turmaFilha.getNome() + " (ID: " + turmaFilha.getId() + ")";
 
-            resultado += "\n--------------------"
-                       + "\n|| Turmas filhas:" + turmasFilhas;
+            resultado += """
+                    
+                    --------------------
+                    || Turmas filhas:%s""".formatted(turmasFilhas);
         } else {
-            resultado += "\n--------------------"
-                       + "\n|| Nao possui turmas filhas.";
+            resultado += """
+                    
+                    --------------------
+                    || Nao possui turmas filhas.""";
         }
 
         // Obtém os nomes dos alunos da turma (se tiver)
-        if (this.Participantes != null) {
+        if (!this.Turmas_Filhas.isEmpty()) {
             String alunos = "";
             String professores = "";
 
@@ -207,35 +194,44 @@ public class Turma {
             for (Pessoa participante : this.Participantes) {
                 // Verifica se o participante é um aluno
                 if (participante instanceof Aluno) {
-                    alunos += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")"; 
+                    alunos += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
                 } else { // Se não for aluno, é professor
                     professores += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
                 }
-            } 
+            }
 
             // Se tiver algum aluno, adiciona ele(s)
             if (!alunos.isEmpty()) {
-                resultado += "\n--------------------"
-                + "\n|| Alunos da turma:" + alunos;
+                resultado += """
+                        
+                        --------------------
+                        || Alunos da turma:%s""".formatted(alunos);
             } else {
-                resultado += "\n--------------------"
-                + "\n|| Nao possui alunos.";
+                resultado += """
+                        
+                        --------------------
+                        || Nao possui alunos.""";
             }
 
             // Se tiver algum professor, adiciona ele(s)
             if (!professores.isEmpty()) {
-                resultado += "\n--------------------"
-                + "\n|| Professores da turma:" + professores;
+                resultado += """
+                        
+                        --------------------
+                        || Professores da turma:%s""".formatted(professores);
             } else {
-                resultado += "\n--------------------"
-                + "\n|| Nao possui professores.";
+                resultado += """
+                        
+                        --------------------
+                        || Nao possui professores.""";
             }
- 
-        } else {
-            resultado += "\n--------------------"
-                       + "\n|| Nao possui alunos ou professores.";
-        }
 
+        } else {
+            resultado += """
+                    
+                    --------------------
+                    || Nao possui alunos ou professores.""";
+        }
 
         return resultado;
     }
@@ -283,7 +279,7 @@ public class Turma {
         return this.Fim;
     }
 
-    public Turma[] getTurmasFilhas() {
+    public ArrayList<Turma> getTurmasFilhas() {
         return this.Turmas_Filhas;
     }
     

@@ -29,7 +29,7 @@ public class Entrada {
     /*
      * Espera o usuário dar enter para continuar.
      */
-    public static final void esperaEnter() {
+    public static void esperaEnter() {
         System.out.println("Pressione Enter para continuar...");
         
         // A função lerString() é preparada para NÃO ler uma string vazia,
@@ -46,7 +46,7 @@ public class Entrada {
      * @param entradas Array com as strings válidas aceitas.
      * @return A string lida do usuário.
      */
-    public static final String lerString(String mensagem, String[] entradas) {
+    public static String lerString(String mensagem, String[] entradas) {
         String entrada;
         boolean entradaValida = false;
 
@@ -79,7 +79,7 @@ public class Entrada {
      * @param mensagem A mensagem a ser exibida ao usuário.
      * @return A string lida do usuário.
      */
-    public static final String lerString(String mensagem) {
+    public static String lerString(String mensagem) {
         System.out.print(mensagem);
         return lerString();
     }
@@ -89,7 +89,7 @@ public class Entrada {
      * 
      * @return A string lida do usuário.
      */
-    public static final String lerString() {
+    public static String lerString() {
         String entrada;
 
         // Loop para garantir que a entrada seja válida
@@ -123,7 +123,7 @@ public class Entrada {
      * @param mensagem A mensagem a ser exibida ao usuário.
      * @return O inteiro lido do usuário.
      */
-    public static final int lerInteiro(String mensagem) {
+    public static int lerInteiro(String mensagem) {
         System.out.print(mensagem);
         return lerInteiro();
     }
@@ -133,7 +133,7 @@ public class Entrada {
      * 
      * @return O inteiro lido do usuário.
      */
-    public static final int lerInteiro() {
+    public static int lerInteiro() {
         int entrada;
 
         // Loop para garantir que a entrada seja válida
@@ -160,12 +160,12 @@ public class Entrada {
      * @param mensagem A mensagem a ser exibida ao usuário.
      * @return A data lida do usuário.
      */
-    public static final Date lerData(String mensagem) {
+    public static Date lerData(String mensagem) {
         System.out.print(mensagem);
         return lerData();
     }
 
-    public static final Date lerData() {
+    public static Date lerData() {
         Date data;
         String entrada;
 
