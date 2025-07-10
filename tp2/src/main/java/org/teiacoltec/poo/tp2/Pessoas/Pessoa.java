@@ -60,10 +60,9 @@ public abstract class Pessoa {
             String tipoDePessoa = Entrada.lerString("Digite o tipo de pessoa (Aluno ou Professor)", tiposDePessoas);
 
             switch (tipoDePessoa) {
-                case "Aluno":
-                    novo = (Pessoa) Aluno.criarAluno(cpf, nome, dataNascimento, email, endereco);
-                    break;
-                default: System.out.println("Tipo de pessoa invalido. Isso nao deveria acontecer!");
+                case "Aluno" -> novo = (Pessoa) Aluno.criarAluno(cpf, nome, dataNascimento, email, endereco);
+                case "Professor" -> novo = (Pessoa) Professor.criarProfessor(cpf, nome, dataNascimento, email, endereco);
+                default -> System.out.println("Tipo de pessoa invalido. Isso nao deveria acontecer!");
             }
         }
         while (novo == null);
@@ -87,7 +86,8 @@ public abstract class Pessoa {
     }
 
     /**
-     * Apaga uma pessoa da lista de pessoas
+     * Apaga uma pessoa da lista de pessoas. Note que
+     * apaga APENAS DA LISTA DE PESSOAS!
      * 
      * @param pessoa a pessoa que se quer apagar
      * @throws PessoaForaDaListaException se a pessoa não estiver na lista

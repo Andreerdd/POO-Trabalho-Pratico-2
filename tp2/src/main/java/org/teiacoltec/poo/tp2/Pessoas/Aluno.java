@@ -26,6 +26,7 @@ public class Aluno extends Pessoa {
     /*
      * Cria um novo aluno
      * 
+     * @param ... informações do aluno
      * @return o aluno criado 
      */
     public static Aluno criarAluno(String cpf, String nome, Date nascimento, String email, String endereco) {

@@ -25,6 +25,7 @@ public class FuncoesMenu extends InterfaceDoUsuario {
         } catch (PessoaNaoEncontradaException e) {
             System.out.println("A pessoa com CPF %s nao foi encontrada.".formatted(cpf));
         }
+        Entrada.esperaEnter();
     }
 
     public static void atualizarPessoa() {
