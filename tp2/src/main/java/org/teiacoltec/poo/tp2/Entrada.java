@@ -2,9 +2,6 @@
  * Classe responsável pelo tratamento de entradas.
  * Recomendo usar aqui para evitar erros como 
  * "entradas de tipos incorretos".
- * 
- *  Author: André Dias
- *  08/07/2025
  */
 
 package org.teiacoltec.poo.tp2;
