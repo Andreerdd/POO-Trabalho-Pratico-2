@@ -4,16 +4,20 @@
 
 package org.teiacoltec.poo.tp2.Escola;
 
-import java.text.SimpleDateFormat; // Classe Date
-import java.util.ArrayList; // Classe SimpleDateFormat (para formatar a data)
-import java.util.Date; // Classe HashMap (para armazenar atividades)
-import java.util.HashMap; // Classe ArrayList (para armazenar atividades)
+import java.text.SimpleDateFormat; // Classe SimpleDateFormat (para formatar a data)
+import java.util.ArrayList; // Classe ArrayList (para armazenar atividades)
+import java.util.Date; // Classe Date
+import java.util.HashMap; // Classe HashMap (para armazenar atividades)
+import java.util.LinkedList; // Classe LinkedList (para armazenar pessoas)
 
+import org.teiacoltec.poo.tp2.Excecoes.AtividadeJaAssociadaException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
 import org.teiacoltec.poo.tp2.Pessoas.Aluno;
+import org.teiacoltec.poo.tp2.Pessoas.Monitor;
 import org.teiacoltec.poo.tp2.Pessoas.Pessoa;
+import org.teiacoltec.poo.tp2.Pessoas.Professor;
 
 public class Turma {
 
@@ -25,7 +29,7 @@ public class Turma {
     private final ArrayList<Pessoa> Participantes = new ArrayList<>();
     private Turma Turma_Pai;
     private final ArrayList<Turma> Turmas_Filhas = new ArrayList<>();
-    private final HashMap<String, Atividade> atividades = new HashMap<>();
+    private final HashMap<Integer, Atividade> Atividades = new HashMap<>();
 
     public Turma(int id, String nome, String descricao, Date inicio, Date fim) {
         this.ID = id;
@@ -33,6 +37,76 @@ public class Turma {
         this.Descricao = descricao;
         this.Inicio = inicio;
         this.Fim = fim;
+    }
+
+    /**
+     * Obtém uma lista dos professores da turma
+     * 
+     * @return lista dos professores da turma
+     */
+    public LinkedList<Professor> obtemListaProfessores() {
+        LinkedList<Professor> professores = new LinkedList<>();
+
+        // Passa por todas as pessoas, vendo se é professor
+        for (Pessoa participante : this.Participantes) {
+            if (participante instanceof Professor professor) {
+                professores.add(professor);
+            }
+        }
+
+        return professores;
+    }
+
+    /**
+     * Obtém uma lista dos alunos da turma
+     * 
+     * @return lista dos alunos da turma
+     */
+    public LinkedList<Aluno> obtemListaAlunos() {
+        LinkedList<Aluno> alunos = new LinkedList<>();
+
+        // Passa por todas as pessoas, vendo se é aluno
+        for (Pessoa pessoa : this.Participantes) {
+            if (pessoa instanceof Aluno aluno) {
+                alunos.add(aluno);
+            }
+        }
+
+        return alunos;
+    }
+
+    /**
+     * Obtém uma lista dos monitores da turma
+     * 
+     * @return lista dos monitores da turma
+     */
+    public LinkedList<Monitor> obtemListaMonitor() {
+        LinkedList<Monitor> monitores = new LinkedList<>();
+
+        // Passa por todas as pessoas, vendo se é monitor
+        for (Pessoa pessoa : this.Participantes) {
+            if (pessoa instanceof Monitor monitor) {
+                monitores.add(monitor);
+            }
+        }
+
+        return monitores;
+    }
+
+    /**
+     * Associa a atividade à turma
+     * 
+     * @param atividade atividade que será associada
+     * @throws AtividadeJaAssociadaException se a atividade já está associada à turma
+     */
+    public void associaAtividade(Atividade atividade) throws AtividadeJaAssociadaException {
+        // Verifica se já está associada
+        if (Atividades.containsKey(atividade.getId())) {
+            throw new AtividadeJaAssociadaException(atividade.getNome(), this.getNome());
+        }
+
+        // Se chegou até aqui, a atividade não está associada
+        Atividades.put(atividade.getId(), atividade);
     }
 
     private int procurarPessoa(Pessoa pessoa) throws PessoaNaoEncontradaException {
