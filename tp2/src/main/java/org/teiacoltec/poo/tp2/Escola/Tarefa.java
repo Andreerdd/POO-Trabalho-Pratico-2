@@ -55,7 +55,7 @@ public class Tarefa {
      * Obtém uma tarefa pelo ID dela.
      * @param id O ID da tarefa a ser obtida.
      * @return A tarefa correspondente ao ID.
-     * @throws TarefaNaoEncontradaException
+     * @throws TarefaNaoEncontradaException Se a tarefa não for encontrada.
      */
     public static Tarefa obtemTarefaPorId(int id) throws TarefaNaoEncontradaException {
         // Verifica se a tarefa existe no HashMap

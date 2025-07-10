@@ -23,7 +23,7 @@ public class InterfaceDoUsuario {
      * Loop que mostrará o menu e irá interagir com
      * o usuário.
      */
-    public static final void MenuPrincipal() {
+    public static void MenuPrincipal() {
         int opcao;
         do {
             imprimirLinha(); // decoração
@@ -94,7 +94,7 @@ public class InterfaceDoUsuario {
     /**
      * Imprime uma linha de igual.
      */
-    public static final void imprimirLinha() {
+    public static void imprimirLinha() {
         System.out.println("==================================================");
     }
 
