@@ -11,9 +11,11 @@ import java.util.HashMap; // Classe HashMap (para armazenar atividades)
 import java.util.LinkedList; // Classe LinkedList (para armazenar pessoas)
 
 import org.teiacoltec.poo.tp2.Excecoes.AtividadeJaAssociadaException;
+import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
+import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
 import org.teiacoltec.poo.tp2.Pessoas.Aluno;
 import org.teiacoltec.poo.tp2.Pessoas.Monitor;
 import org.teiacoltec.poo.tp2.Pessoas.Pessoa;
@@ -107,6 +109,22 @@ public class Turma {
 
         // Se chegou até aqui, a atividade não está associada
         Atividades.put(atividade.getId(), atividade);
+    }
+
+    /**
+     * Desassocia a atividade à turma
+     * 
+     * @param atividade atividade que será desassociada
+     * @throws AtividadeNaoEncontradaException se a atividade não está desassociada 
+     */
+    public void desassociaAtividade(Atividade atividade) throws AtividadeNaoEncontradaException {
+        // Verifica se já está desassociada
+        if (!Atividades.containsKey(atividade.getId())) {
+            throw new AtividadeNaoEncontradaException(atividade.getNome(), this.getNome());
+        }
+
+        // Se chegou até aqui, a atividade está associada, então desassociada
+        Atividades.remove(atividade.getId());
     }
 
     private int procurarPessoa(Pessoa pessoa) throws PessoaNaoEncontradaException {
@@ -207,7 +225,7 @@ public class Turma {
 
 
     // Obtém as informações da turma
-    public String ObterInformacoes() {
+    public String ObterInformacoes(boolean informacaoCompleta) {
         // Formata a data de nascimento
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         String inicioFormatado = formato.format(this.Inicio);
@@ -221,87 +239,98 @@ public class Turma {
                 || Data de Inicio: %s
                 || Data de Fim: %s""".formatted(this.Nome, this.ID, this.Descricao, inicioFormatado, fimFormatado);
 
-        // Obtém algumas informações da turma pai (se existir)
-        if (this.Turma_Pai != null) {
-            resultado += """
-                    
-                    --------------------
-                    || Nome da turma pai: %s
-                    || ID da turma pai: %d""".formatted(this.Turma_Pai.getNome(), this.Turma_Pai.getId());
+        
+        // Verifica se a pessoa quer a informação completa
+        if (informacaoCompleta) {
+            // Obtém algumas informações da turma pai (se existir)
+            if (this.Turma_Pai != null) {
+                resultado += """
+                        
+                        --------------------
+                        || Nome da turma pai: %s
+                        || ID da turma pai: %d""".formatted(this.Turma_Pai.getNome(), this.Turma_Pai.getId());
 
-        } else {
-            resultado += """
-                    
-                    --------------------
-                    || Nao possui turma pai""";
-        }
+            } else {
+                resultado += """
+                        
+                        --------------------
+                        || Nao possui turma pai""";
+            }
 
-        // Obtém algumas informações das turmas filhas (se houver)
-        if (!this.Turmas_Filhas.isEmpty()) {
-            String turmasFilhas = "";
+            // Obtém algumas informações das turmas filhas (se houver)
+            if (!this.Turmas_Filhas.isEmpty()) {
+                String turmasFilhas = "";
 
-            for (Turma turmaFilha : this.Turmas_Filhas)
-                turmasFilhas += "\n||\t" + turmaFilha.getNome() + " (ID: " + turmaFilha.getId() + ")";
+                for (Turma turmaFilha : this.Turmas_Filhas)
+                    turmasFilhas += "\n||\t" + turmaFilha.getNome() + " (ID: " + turmaFilha.getId() + ")";
 
-            resultado += """
-                    
-                    --------------------
-                    || Turmas filhas:%s""".formatted(turmasFilhas);
-        } else {
-            resultado += """
-                    
-                    --------------------
-                    || Nao possui turmas filhas.""";
-        }
+                resultado += """
+                        
+                        --------------------
+                        || Turmas filhas:%s""".formatted(turmasFilhas);
+            } else {
+                resultado += """
+                        
+                        --------------------
+                        || Nao possui turmas filhas.""";
+            }
+            
+            // Obtém os nomes dos alunos da turma (se tiver)
+            if (!this.Turmas_Filhas.isEmpty()) {
+                String alunos = "";
+                String professores = "";
 
-        // Obtém os nomes dos alunos da turma (se tiver)
-        if (!this.Turmas_Filhas.isEmpty()) {
-            String alunos = "";
-            String professores = "";
-
-            // Obtém os alunos e os professores
-            for (Pessoa participante : this.Participantes) {
-                // Verifica se o participante é um aluno
-                if (participante instanceof Aluno) {
-                    alunos += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
-                } else { // Se não for aluno, é professor
-                    professores += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
+                // Obtém os alunos e os professores
+                for (Pessoa participante : this.Participantes) {
+                    // Verifica se o participante é um aluno
+                    if (participante instanceof Aluno) {
+                        alunos += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
+                    } else { // Se não for aluno, é professor
+                        professores += "\n||\t" + participante.getNome() + " (Email: " + participante.getEmail() + ")";
+                    }
                 }
-            }
 
-            // Se tiver algum aluno, adiciona ele(s)
-            if (!alunos.isEmpty()) {
-                resultado += """
-                        
-                        --------------------
-                        || Alunos da turma:%s""".formatted(alunos);
+                // Se tiver algum aluno, adiciona ele(s)
+                if (!alunos.isEmpty()) {
+                    resultado += """
+                            
+                            --------------------
+                            || Alunos da turma:%s""".formatted(alunos);
+                } else {
+                    resultado += """
+                            
+                            --------------------
+                            || Nao possui alunos.""";
+                }
+
+                // Se tiver algum professor, adiciona ele(s)
+                if (!professores.isEmpty()) {
+                    resultado += """
+                            
+                            --------------------
+                            || Professores da turma:%s""".formatted(professores);
+                } else {
+                    resultado += """
+                            
+                            --------------------
+                            || Nao possui professores.""";
+                }
+
             } else {
                 resultado += """
                         
                         --------------------
-                        || Nao possui alunos.""";
+                        || Nao possui alunos ou professores.""";
             }
-
-            // Se tiver algum professor, adiciona ele(s)
-            if (!professores.isEmpty()) {
-                resultado += """
-                        
-                        --------------------
-                        || Professores da turma:%s""".formatted(professores);
-            } else {
-                resultado += """
-                        
-                        --------------------
-                        || Nao possui professores.""";
-            }
-
-        } else {
-            resultado += """
-                    
-                    --------------------
-                    || Nao possui alunos ou professores.""";
         }
+        
+        InterfaceDoUsuario.imprimirLinha();
 
+        // Mostra as atividades
+        for (Atividade att : Atividades.values()) {
+            System.out.println(att.ObterInformacoes());
+            InterfaceDoUsuario.imprimirLinha();
+        }
         return resultado;
     }
 

@@ -40,7 +40,7 @@ public class InterfaceDoUsuario {
             4 - Listar Pessoas            
 
             ==== Turmas ====           ==== Atividades ====
-            5 -                        9  - 
+            5 - Criar Turma                       9  - 
             6 -                        10 -
             7 -                        11 -
             8 -                        12 -
@@ -82,7 +82,7 @@ public class InterfaceDoUsuario {
      * @param turma turma que as informações serão impressas.
      */
     public static void imprimirInformacoes(Turma turma) {
-        String informacoes = turma.ObterInformacoes();
+        String informacoes = turma.ObterInformacoes(true);
 
         imprimirLinha();
         System.out.println(Utils.embelezar(informacoes));
