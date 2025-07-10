@@ -32,13 +32,13 @@ public class Professor extends Pessoa {
     public static Professor criarProfessor(String cpf, String nome, Date nascimento, String email, String endereco) {
         Professor novo;
 
-        // Obtém as informações & cria um novo aluno
+        // Obtém as informações & cria um novo professor
         String matricula = Entrada.lerString("Matricula do professor");
         String curso = Entrada.lerString("Curso do professor");
 
         novo = new Professor(cpf, nome, nascimento, email, endereco, matricula, curso);
 
-        // Retorna o aluno criado
+        // Retorna o professor criado
         return novo;
     }
 
