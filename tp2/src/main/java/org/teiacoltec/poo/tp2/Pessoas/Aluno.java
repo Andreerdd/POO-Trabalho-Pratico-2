@@ -3,7 +3,6 @@ package org.teiacoltec.poo.tp2.Pessoas;
 import java.util.Date;
 
 import org.teiacoltec.poo.tp2.Entrada;
-import org.teiacoltec.poo.tp2.Main;
 
 public class Aluno extends Pessoa {
 

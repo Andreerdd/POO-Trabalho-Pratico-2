@@ -24,28 +24,41 @@ public class InterfaceDoUsuario {
     public static void MenuPrincipal() {
         int opcao;
         do {
-            imprimirLinha(); // decoração
-            opcao = esperarEntrada();
+            // decoração
+            System.out.println("");
+            imprimirLinha(); 
+
+            // Printa as opções
+            System.out.println("""
+            Opcoes:
+            0 - Sair
+
+            ==== Pessoas ====             
+            1 - Criar pessoa              
+            2 - Remover Pessoa           
+            3 - Atualizar Pessoa         
+            4 - Listar Pessoas            
+
+            ==== Turmas ====           ==== Atividades ====
+            5 -                        9  - 
+            6 -                        10 -
+            7 -                        11 -
+            8 -                        12 -
+            """);
+
+            opcao = esperarEntrada(ENTRADA_MIN, ENTRADA_MAX);
 
             // Ação da opção
             switch (opcao) {
-                case 1:
+                case 1 -> FuncoesMenu.criarPessoa();
+                case 2 -> FuncoesMenu.removerPessoa();
+                case 3 -> FuncoesMenu.atualizarPessoa();
+                case 4 -> FuncoesMenu.listarPessoas();
+
+                case 0 -> System.out.println("Saiu do programa.");
                 
-                    Pessoa pessoa = Pessoa.criarPessoa();
-                    System.out.println("Pessoa criada com as informacoes:\n");
-                    imprimirInformacoes(pessoa);
-
-                    imprimirLinha();
-                    Entrada.esperaEnter();
-                    
-                    break;
-
-                case 0:
-                    System.out.println("Saiu do programa.");
-                case Entrada.ENTRADA_INVALIDA:
-                    // Não precisa de printar que digitou errado,
-                    // a função já printa isso!
-                    break;
+                // Não precisa contar com isso
+                // case Entrada.ENTRADA_INVALIDA
             }
         } while (opcao != Entrada.ENTRADA_SAIR);
     }
@@ -101,23 +114,14 @@ public class InterfaceDoUsuario {
      * 
      * @return opção escolhida (e válida) pelo usuário
      */
-    private static int esperarEntrada() {
+    private static int esperarEntrada(int min, int max) {
         int opcaoEscolhida;
-
-        // Printa as opções
-        System.out.println("""
-            Opcoes:
-            0 - Sair
-
-            == Pessoas ==
-            1 - Criar pessoa
-            """);
 
         try {
             opcaoEscolhida = Entrada.lerInteiro();
 
             // Verifica se a opção escolhida é válida
-            if (opcaoEscolhida < ENTRADA_MIN || opcaoEscolhida > ENTRADA_MAX) {
+            if (opcaoEscolhida < min || opcaoEscolhida > max) {
                 throw new InputMismatchException("Digite uma opcao valida");
             }
         } catch (InputMismatchException e) {

@@ -5,5 +5,9 @@ public class PessoaNaoEncontradaException extends Exception {
     public PessoaNaoEncontradaException(String nomePessoa, String nomeTurma) {
         super("A pessoa " + nomePessoa + " nao esta na turma " + nomeTurma);
     }
+
+    public PessoaNaoEncontradaException(String message) {
+        super(message);
+    }
   
 }
