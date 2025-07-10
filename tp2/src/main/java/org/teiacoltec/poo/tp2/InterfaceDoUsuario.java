@@ -30,7 +30,7 @@ public class InterfaceDoUsuario {
 
             // Printa as opções
             System.out.println("""
-            Opcoes:
+            Opcoes: 
             0 - Sair
 
             ==== Pessoas ====             
