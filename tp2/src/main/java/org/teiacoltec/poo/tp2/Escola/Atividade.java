@@ -46,12 +46,11 @@ public class Atividade {
         Atividades.put(id, this);
     }
 
-    /**
+    /*
      * Obtém uma atividade pelo ID dela.
      *
      * @param id O ID da atividade a ser obtida.
      * @return A atividade correspondente ao ID.
-     * @throws AtividadeNaoEncontradaException se a atividade não for encontrada
      */
     public Atividade obtemAtividadePorId(int id) throws AtividadeNaoEncontradaException {
         // Verifica se a atividade existe

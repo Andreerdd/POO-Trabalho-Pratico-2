@@ -21,7 +21,11 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "org.teiacoltec.poo.tp2.Main",
+<<<<<<< HEAD
             "projectName": "tp2_e383fb36"
+=======
+            "projectName": "tp2"
+>>>>>>> 71b4786ca9143449723250c8d1d197469255acac
         }
     ]
 }

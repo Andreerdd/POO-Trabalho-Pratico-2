@@ -5,10 +5,13 @@
 package org.teiacoltec.poo.tp2.Escola;
 
 import java.text.SimpleDateFormat; // Classe Date
-import java.util.ArrayList; // Classe SimpleDateFormat (para formatar a data)
-import java.util.Date; // Classe HashMap (para armazenar atividades)
-import java.util.HashMap; // Classe ArrayList (para armazenar atividades)
+import java.util.Arrays; // Classe Arrays
+import java.util.Date; // Classe SimpleDateFormat (para formatar a data)
+import java.util.HashMap; // Classe HashMap (para armazenar atividades)
+import java.util.ArrayList; // Classe ArrayList (para armazenar atividades)
 
+// Imports
+import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
