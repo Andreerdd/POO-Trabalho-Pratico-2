@@ -63,7 +63,7 @@ public abstract class Pessoa {
         return novo;
     }
 
-    // Sobrescreve o método equals
+    // O método equals (igualdade) verifica se duas pessoas são iguais
     public boolean equals(Pessoa pessoa) {
         // Verifica se tem o mesmo CPF
         return pessoa.getCPF().equals(this.getCPF());

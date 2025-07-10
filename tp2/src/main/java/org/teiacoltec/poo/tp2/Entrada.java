@@ -26,7 +26,7 @@ public class Entrada {
     // Scanner responsável pela entrada durante todo o programa
     public static final Scanner inScanner = new Scanner(System.in);
 
-    /*
+    /**
      * Espera o usuário dar enter para continuar.
      */
     public static void esperaEnter() {
@@ -38,7 +38,7 @@ public class Entrada {
         inScanner.nextLine();
     }
     
-    /*
+    /**
      * Lê uma string do usuário enquanto o usuário não digitar algo
      * dentro do vetor "entradas"
      * 
@@ -73,7 +73,7 @@ public class Entrada {
         return entrada;
     }
 
-    /*
+    /**
      * Lê uma string do usuário.
      * 
      * @param mensagem A mensagem a ser exibida ao usuário.
@@ -84,7 +84,7 @@ public class Entrada {
         return lerString();
     }
 
-     /*
+     /**
      * Lê uma string do usuário.
      * 
      * @return A string lida do usuário.
@@ -117,7 +117,7 @@ public class Entrada {
     }
 
 
-    /*
+    /**
      * Lê um inteiro do usuário.
      * 
      * @param mensagem A mensagem a ser exibida ao usuário.
@@ -128,7 +128,7 @@ public class Entrada {
         return lerInteiro();
     }
 
-    /*
+    /**
      * Lê um inteiro do usuário.
      * 
      * @return O inteiro lido do usuário.
@@ -140,8 +140,10 @@ public class Entrada {
         do {
             try {
                 System.out.print("\n: ");
+
                 String strEntrada = inScanner.nextLine();
                 entrada = Integer.parseInt(strEntrada);
+
                 // Se chegou aqui, a entrada é válida (nenhuma exceção)
                 break;
             } catch (InputMismatchException | NumberFormatException e) {
@@ -154,7 +156,7 @@ public class Entrada {
         return entrada;
     }
 
-    /*
+    /**
      * Lê uma data do usuário.
      * 
      * @param mensagem A mensagem a ser exibida ao usuário.

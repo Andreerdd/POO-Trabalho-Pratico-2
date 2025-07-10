@@ -12,8 +12,8 @@ import java.util.Date; // Classe SimpleDateFormat (para formatar a data)
 import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
 
 public class Atividade {
-    // Mapa de todas as atividades existentes
-    private static final HashMap<String, Atividade> Atividades = new HashMap<>();
+    // Todas as atividades existentes
+    private static final HashMap<Integer, Atividade> Atividades = new HashMap<>();
 
     private final int ID;
     private String Nome;
@@ -22,6 +22,7 @@ public class Atividade {
     private Date Fim;
     private float valor;
 
+    // Construtor com ID
     public Atividade(int id, String nome, String descricao, Date inicio, Date fim, float valor) {
         this.ID = id;
         this.Nome = nome;
@@ -29,6 +30,21 @@ public class Atividade {
         this.Inicio = inicio;
         this.Fim = fim;
         this.valor = valor;
+        // Adiciona a atividade ao mapa de atividades
+        Atividades.put(id, this);
+    }
+
+    // Construtor sem ID, gera um ID único automaticamente
+    public Atividade(String nome, String descricao, Date inicio, Date fim, float valor) {
+        int id = Atividades.size() + 1; // Gera um ID único baseado no tamanho atual do mapa
+        this.ID = id;
+        this.Nome = nome;
+        this.Descricao = descricao;
+        this.Inicio = inicio;
+        this.Fim = fim;
+        this.valor = valor;
+        // Adiciona a atividade ao mapa de atividades
+        Atividades.put(id, this);
     }
 
     /*
@@ -37,9 +53,9 @@ public class Atividade {
      * @param id O ID da atividade a ser obtida.
      * @return A atividade correspondente ao ID.
      */
-    public Atividade obtemAtividadePorId(String id) throws AtividadeNaoEncontradaException {
+    public Atividade obtemAtividadePorId(int id) throws AtividadeNaoEncontradaException {
         // Verifica se a atividade existe
-        if (this.atividades.containsKey(id)) return this.atividades.get(id);
+        if (Atividades.containsKey(id)) return Atividades.get(id);
 
         // Se chegou até aqui, é porque a atividade não foi encontrada
         throw new AtividadeNaoEncontradaException("Nao encontrou a atividade na lista da turma " + this.getNome(), id);

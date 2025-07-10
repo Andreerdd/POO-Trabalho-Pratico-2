@@ -19,14 +19,14 @@ public class InterfaceDoUsuario {
     private static final int ENTRADA_MIN = 0;
     private static final int ENTRADA_MAX = 4;
 
-    /*
+    /**
      * Loop que mostrará o menu e irá interagir com
      * o usuário.
      */
     public static final void MenuPrincipal() {
         int opcao;
         do {
-            imprimirLinha();
+            imprimirLinha(); // decoração
             opcao = esperarEntrada();
 
             // Ação da opção
@@ -52,7 +52,7 @@ public class InterfaceDoUsuario {
         } while (opcao != Entrada.ENTRADA_SAIR);
     }
 
-    /*
+    /**
      * Imprime as informações de uma pessoa.
      * 
      * @param pessoa pessoa que as informações serão impressas.
@@ -65,7 +65,7 @@ public class InterfaceDoUsuario {
         imprimirLinha();
     }
 
-    /*
+    /**
      * Imprime as informações de uma turma.
      * 
      * @param turma turma que as informações serão impressas.
@@ -78,7 +78,7 @@ public class InterfaceDoUsuario {
         imprimirLinha();
     }
 
-    /*
+    /**
      * Imprime as informações de uma atividade.
      * 
      * @param atividade atividade que as informações serão impressas.
@@ -91,14 +91,14 @@ public class InterfaceDoUsuario {
         imprimirLinha();
     }
 
-    /*
+    /**
      * Imprime uma linha de igual.
      */
     public static final void imprimirLinha() {
         System.out.println("==================================================");
     }
 
-    /*
+    /**
      * Espera e retorna a entrada do usuário.
      * 
      * @return opção escolhida (e válida) pelo usuário
@@ -117,11 +117,13 @@ public class InterfaceDoUsuario {
 
         try {
             opcaoEscolhida = Entrada.lerInteiro();
+
+            // Verifica se a opção escolhida é válida
             if (opcaoEscolhida < ENTRADA_MIN || opcaoEscolhida > ENTRADA_MAX) {
                 throw new InputMismatchException("Digite uma opcao valida");
             }
         } catch (InputMismatchException e) {
-            System.out.println("Erro: " + e.getMessage());
+            System.out.println("Erro ao ler a entrada: " + e.getMessage());
             Entrada.esperaEnter();
             opcaoEscolhida = Entrada.ENTRADA_INVALIDA;
         }
