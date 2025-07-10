@@ -3,7 +3,6 @@ package org.teiacoltec.poo.tp2.Pessoas;
 import java.util.Date;
 
 import org.teiacoltec.poo.tp2.Entrada;
-import org.teiacoltec.poo.tp2.Main;
 
 public class Aluno extends Pessoa {
 
@@ -27,6 +26,7 @@ public class Aluno extends Pessoa {
     /*
      * Cria um novo aluno
      * 
+     * @param ... informações do aluno
      * @return o aluno criado 
      */
     public static Aluno criarAluno(String cpf, String nome, Date nascimento, String email, String endereco) {

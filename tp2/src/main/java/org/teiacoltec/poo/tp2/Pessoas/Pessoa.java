@@ -2,11 +2,17 @@ package org.teiacoltec.poo.tp2.Pessoas;
 
 import java.text.SimpleDateFormat; // Classe SimpleDateFormat (para formatar a data)
 import java.util.Date; // Classe Date
+import java.util.HashMap;
 
-// Imports
-import org.teiacoltec.poo.tp2.Entrada; 
+import org.teiacoltec.poo.tp2.Entrada;
+import org.teiacoltec.poo.tp2.Excecoes.PessoaForaDaListaException;
+import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException; 
 
 public abstract class Pessoa {
+
+    // Todas as pessoas existestes
+    private static final HashMap<String, Pessoa> Pessoas = new HashMap<>();
+
     // Para o código ficar mais bonito
     private static final String[] tiposDePessoas = new String[]{"Aluno", "Professor"};
     
@@ -23,6 +29,8 @@ public abstract class Pessoa {
         this.Nascimento = nascimento;
         this.Email = email;
         this.Endereco = endereco;
+        
+        Pessoas.put(cpf, this);
     }
 
     // Retorna as informações da pessoa de forma organizada
@@ -52,15 +60,44 @@ public abstract class Pessoa {
             String tipoDePessoa = Entrada.lerString("Digite o tipo de pessoa (Aluno ou Professor)", tiposDePessoas);
 
             switch (tipoDePessoa) {
-                case "Aluno":
-                    novo = (Pessoa) Aluno.criarAluno(cpf, nome, dataNascimento, email, endereco);
-                    break;
-                default: System.out.println("Tipo de pessoa invalido. Isso nao deveria acontecer!");
+                case "Aluno" -> novo = (Pessoa) Aluno.criarAluno(cpf, nome, dataNascimento, email, endereco);
+                case "Professor" -> novo = (Pessoa) Professor.criarProfessor(cpf, nome, dataNascimento, email, endereco);
+                default -> System.out.println("Tipo de pessoa invalido. Isso nao deveria acontecer!");
             }
         }
         while (novo == null);
 
         return novo;
+    }
+
+    /**
+     * Obtém uma pessoa a partir do seu CPF
+     * 
+     * @param cpf o cpf da pessoa a ser procurada
+     * @return a pessoa encontrada
+     * @throws PessoaNaoEncontradaException se a pessoa não for encontrada
+     */
+    public static Pessoa obtemPessoaPorCPF(String cpf) throws PessoaNaoEncontradaException {
+        // Verifica se a pessoa existe
+        if (Pessoas.containsKey(cpf)) return Pessoas.get(cpf);
+
+        // Se chegou até aqui, é porque a pessoa não foi encontrada
+        throw new PessoaNaoEncontradaException("Nao encontrou a pessoa com cpf: " + cpf);
+    }
+
+    /**
+     * Apaga uma pessoa da lista de pessoas. Note que
+     * apaga APENAS DA LISTA DE PESSOAS!
+     * 
+     * @param pessoa a pessoa que se quer apagar
+     * @throws PessoaForaDaListaException se a pessoa não estiver na lista
+     */
+    public static void apagarPessoaDaLista(Pessoa pessoa) throws PessoaForaDaListaException {
+        // Verifica se a pessoa não está na lista
+        if (!Pessoas.containsKey(pessoa.getCPF())) throw new PessoaForaDaListaException(pessoa.getNome());
+        
+        // Se chegou até aqui, a pessoa está na lista
+        Pessoas.remove(pessoa.getCPF());
     }
 
     // O método equals (igualdade) verifica se duas pessoas são iguais
@@ -111,7 +148,9 @@ public abstract class Pessoa {
         return this.CPF;
     }
     
-
+    public static HashMap<String, Pessoa> getPessoas() {
+        return Pessoas; 
+    }
     
     
 }

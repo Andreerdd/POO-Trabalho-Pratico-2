@@ -11,10 +11,6 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-// Imports
-import org.teiacoltec.poo.tp2.Utils;
-import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
-
 public class Entrada {
     // Constantes //
     public static final int ENTRADA_INVALIDA = -1; // Se a pessoa digitou algo inválido

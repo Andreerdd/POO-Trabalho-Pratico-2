@@ -4,11 +4,10 @@
 package org.teiacoltec.poo.tp2.Escola;
 
 
-import java.util.HashMap; // Classe HashMap (para armazenar atividades)
-import java.text.SimpleDateFormat; // Classe Date
-import java.util.Date; // Classe SimpleDateFormat (para formatar a data)
+import java.text.SimpleDateFormat; // Classe HashMap (para armazenar atividades)
+import java.util.Date; // Classe Date
+import java.util.HashMap; // Classe SimpleDateFormat (para formatar a data)
 
-// Imports
 import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
 
 public class Atividade {
@@ -47,11 +46,12 @@ public class Atividade {
         Atividades.put(id, this);
     }
 
-    /*
+    /**
      * Obtém uma atividade pelo ID dela.
      *
      * @param id O ID da atividade a ser obtida.
      * @return A atividade correspondente ao ID.
+     * @throws AtividadeNaoEncontradaException se a atividade não for encontrada
      */
     public Atividade obtemAtividadePorId(int id) throws AtividadeNaoEncontradaException {
         // Verifica se a atividade existe
