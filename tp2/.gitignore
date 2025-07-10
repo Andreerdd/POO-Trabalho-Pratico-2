@@ -1,0 +1,6 @@
+# Arquivos compilados
+*.ser
+*.class
+
+# Pasta do vscode
+./vscode
