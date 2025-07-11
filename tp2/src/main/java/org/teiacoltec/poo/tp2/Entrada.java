@@ -56,9 +56,48 @@ public class Entrada {
             
             // Se chegou até aqui, é porque a entrada é inválida
             if (!entradaValida) {
-                System.out.println("Entrada inválida. Digite uma das opções válidas:\n");
+                System.out.println("Entrada inválida. Digite uma das opções válidas:");
                 for (String item : entradas) {
-                    System.out.println(" - " + item + "\n");
+                    System.out.println(" - " + item);
+                }
+                System.out.println(); // decoração
+            }
+        } while (!entradaValida);
+
+        return entrada;
+    }
+
+    /**
+     * Lê uma string do usuário enquanto o usuário digitar algo
+     * dentro do vetor "entradas"
+     *
+     * @param mensagem A mensagem a ser exibida ao usuário.
+     * @param entradas Array com as strings inválidas.
+     * @return A string lida do usuário.
+     */
+    public static String lerStringExceto(String mensagem, String[] entradas) {
+        String entrada;
+        boolean entradaValida;
+
+        do {
+            entrada = lerString(mensagem);
+            entradaValida = true;
+
+            for (String item : entradas) {
+                if (entrada.equalsIgnoreCase(item)) {
+                    entradaValida = false;
+                    if (entradas.length > 1) {
+                        System.out.println("Entrada inválida. Digite um valor diferente de: ");
+                        // Se for mais de uma entrada, exibe todas
+                        for (String invalida : entradas) {
+                            System.out.println(" - " + invalida);
+                        }
+                    } else {
+                        // Só for uma entrada
+                        System.out.println("Entrada inválida. Digite um valor diferente de " + entradas[0] + "\n");
+                    }
+                    esperaEnter();
+                    break;
                 }
             }
         } while (!entradaValida);

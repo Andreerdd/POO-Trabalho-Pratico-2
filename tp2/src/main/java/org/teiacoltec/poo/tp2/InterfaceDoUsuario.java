@@ -16,7 +16,7 @@ public class InterfaceDoUsuario {
 
     // Valor mínimo e máximo da entrada
     private static final int ENTRADA_MIN = 0;
-    private static final int ENTRADA_MAX = 4;
+    private static final int ENTRADA_MAX = 16;
 
     /**
      * Loop que mostrará o menu e irá interagir com
@@ -40,11 +40,11 @@ public class InterfaceDoUsuario {
             3 - Atualizar Pessoa           7 - Atualizar Turma  \s
             4 - Listar Pessoas             8 - Listar Turmas    \s
                                                                 \s
-            ===== Atividades =====       ===== Tarefas =====    \s
-            9 - Criar Atividade           13 - Criar Tarefa     \s
-            10 - Remover Atividade        14 - Remover Tarefa   \s
-            11 - Atualizar Atividade      15 - Atualizar Tarefa \s
-            12 - Listar Atividades        16 - Listar Tarefas   \s
+            ===== Atividades =====         ===== Tarefas =====  \s
+            9 - Criar Atividade            13 - Criar Tarefa    \s
+            10 - Remover Atividade         14 - Remover Tarefa  \s
+            11 - Atualizar Atividade       15 - Atualizar Tarefa\s
+            12 - Listar Atividades         16 - Listar Tarefas  \s
                                                                 \s""");
 
             opcao = esperarEntrada(ENTRADA_MIN, ENTRADA_MAX);

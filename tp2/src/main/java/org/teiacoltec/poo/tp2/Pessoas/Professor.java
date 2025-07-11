@@ -2,9 +2,10 @@ package org.teiacoltec.poo.tp2.Pessoas;
 
 import java.util.Date;
 
+// Imports
 import org.teiacoltec.poo.tp2.Entrada;
 
-public class Professor extends Pessoa {
+public class Professor extends Pessoa implements Matriculado {
 
     private String Matricula;
     private String Formacao;
@@ -18,22 +19,22 @@ public class Professor extends Pessoa {
     // Obtém as informações do professor
     @Override
     public String ObterInformacoes() {
-        return super.ObterInformacoes() 
+        return super.ObterInformacoes("Professor")
             + "\n|| Matricula: " + this.Matricula 
             + "\n|| Formacao: " + this.Formacao;
     }
     
-     /*
+     /**
      * Cria um novo professor
      * 
-     * @param ... informações do professor
+     * @param cpf,nome,nascimento,email,endereco informações do professor
      * @return o professor criado 
      */
-    public static Professor criarProfessor(String cpf, String nome, Date nascimento, String email, String endereco) {
+    public static Professor criarProfessor(String cpf, String nome, Date nascimento, String email, String endereco, String[] matriculas) {
         Professor novo;
 
         // Obtém as informações & cria um novo professor
-        String matricula = Entrada.lerString("Matricula do professor");
+        String matricula = Entrada.lerStringExceto("Matricula do professor", matriculas);
         String curso = Entrada.lerString("Curso do professor");
 
         novo = new Professor(cpf, nome, nascimento, email, endereco, matricula, curso);

@@ -2,16 +2,14 @@ package org.teiacoltec.poo.tp2.Pessoas;
 
 import java.util.Date; // Classe Date
 import java.util.HashMap; // Classe HashMap (para armazenar alunos)
+import java.util.LinkedList;
 
 // Imports
 import org.teiacoltec.poo.tp2.Entrada;
 import org.teiacoltec.poo.tp2.Escola.Tarefa;
 import org.teiacoltec.poo.tp2.Excecoes.AlunoNaoEncontradoException;
 
-public class Aluno extends Pessoa {
-
-    // Todos os alunos existentes
-    private static final HashMap<String, Aluno> Alunos = new HashMap<>();
+public class Aluno extends Pessoa implements Matriculado {
 
     private String Matricula;
     private String Curso;
@@ -21,8 +19,6 @@ public class Aluno extends Pessoa {
         super(cpf, nome, nascimento, email, endereco);
         this.Matricula = matricula;
         this.Curso = curso;
-
-        Alunos.put(matricula, this);
     }
 
     // Obtém as informações do aluno
@@ -35,7 +31,7 @@ public class Aluno extends Pessoa {
         } else {
             informacoesTarefas += Tarefas.values().toString();
         }
-        return super.ObterInformacoes() 
+        return super.ObterInformacoes("Aluno")
             + "\n|| Matricula: " + this.Matricula 
             + "\n|| Curso: " + this.Curso;
     }
@@ -45,6 +41,29 @@ public class Aluno extends Pessoa {
         Tarefas.put(tarefa.getID(), tarefa);
     }
 
+    /**
+     * Obtém todos os alunos cadastrados.
+     *
+     * @return HashMap com a chave sendo a matrícula e o valor sendo o respectivo aluno.
+     */
+    public static HashMap<String, Aluno> obterAlunos() {
+        HashMap<String, Aluno> alunos = new HashMap<>();
+
+        // Obtém os alunos do HashMap de pessoas
+        for (Pessoa pessoa : getPessoas().values()) {
+            /* Pessoalmente, não gosto de fazer instanceof, mas, como
+            aqui o meu objetivo é filtrar e armazenar outro hashmap
+            com alunos poderia ser confuso e poderia gerar erros, abri
+            essa exceção. */
+            // Verifica se a pessoa é um aluno
+            if (pessoa instanceof Aluno) {
+                Aluno temp = (Aluno) pessoa;
+                alunos.put(temp.getMatricula(), temp);
+            }
+        }
+
+        return alunos;
+    }
 
     /**
      * Cria um novo aluno
@@ -52,11 +71,11 @@ public class Aluno extends Pessoa {
      * @param nascimento,email,cpf,nome,endereco informações do aluno
      * @return o aluno criado 
      */
-    public static Aluno criarAluno(String cpf, String nome, Date nascimento, String email, String endereco) {
+    public static Aluno criarAluno(String cpf, String nome, Date nascimento, String email, String endereco, String[] matriculas) {
         Aluno novo;
 
         // Obtém as informações & cria um novo aluno
-        String matricula = Entrada.lerString("Matricula do aluno");
+        String matricula = Entrada.lerStringExceto("Matricula do aluno", matriculas);
         String curso = Entrada.lerString("Curso do aluno");
 
         novo = new Aluno(cpf, nome, nascimento, email, endereco, matricula, curso);
@@ -67,6 +86,9 @@ public class Aluno extends Pessoa {
 
 
     public static Aluno obterAlunoPorMatricula(String matricula) throws AlunoNaoEncontradoException {
+        // Obtém os alunos
+        HashMap<String, Aluno> Alunos = obterAlunos();
+
         // Verifica se o aluno existe
         if (Alunos.containsKey(matricula)) {
             return Alunos.get(matricula);
