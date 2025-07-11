@@ -24,6 +24,17 @@ public class Utils {
     }
 
     /**
+     * Formata uma data no formato dd/mm/aaaa.
+     *
+     * @param data A data a ser formatada
+     * @return A data formatada como string
+     */
+    public static String data_ddMMaaaa(Date data) {
+        // Formata a data para o formato dd/MM/aaaa
+        return dataFormato.format(data);
+    }
+
+    /**
      * Verifica se a data está dentro do período, incluindo o início e o fim.
      *
      * @param data A data a ser verificada

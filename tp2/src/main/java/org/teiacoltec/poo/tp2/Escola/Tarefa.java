@@ -146,10 +146,19 @@ public class Tarefa {
                 + "\n|| Nota: " + this.Nota;
     }
 
+    public String toString() {
+        return "\n|| Nome da Atividade: " + this.Atividade.getNome()
+                + "\n|| ID da Atividade: " + this.Atividade.getId()
+                + "\n|| Turma: " + this.Turma.getNome()
+                + "\n|| Nota: " + this.Nota;
+    }
     // Atualizar a nota da tarefa
     public void atualizarNota(float novaNota) {this.Nota = novaNota;}
     // Obter a nota da tarefa
     public float obterNota() {return this.Nota;}
     // Obter o ID da tarefa
     public int getID() {return this.ID;}
+
+    // Setters //
+    public void setNota(float nota) {this.Nota = nota;}
 }

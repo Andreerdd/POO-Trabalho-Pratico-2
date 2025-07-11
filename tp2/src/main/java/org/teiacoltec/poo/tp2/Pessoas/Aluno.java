@@ -28,6 +28,13 @@ public class Aluno extends Pessoa {
     // Obtém as informações do aluno
     @Override
     public String ObterInformacoes() {
+        String informacoesTarefas = "\n|| Tarefas: ";
+        // Verifica se o aluno tem tarefas
+        if (Tarefas.isEmpty()) {
+            informacoesTarefas = "Nenhuma tarefa cadastrada.";
+        } else {
+            informacoesTarefas += Tarefas.values().toString();
+        }
         return super.ObterInformacoes() 
             + "\n|| Matricula: " + this.Matricula 
             + "\n|| Curso: " + this.Curso;

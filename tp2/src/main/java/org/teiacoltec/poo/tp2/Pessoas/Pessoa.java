@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 import org.teiacoltec.poo.tp2.Entrada;
 import org.teiacoltec.poo.tp2.Excecoes.PessoaForaDaListaException;
-import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException; 
+import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
+import org.teiacoltec.poo.tp2.Utils;
 
 public abstract class Pessoa {
 
@@ -35,13 +36,9 @@ public abstract class Pessoa {
 
     // Retorna as informações da pessoa de forma organizada
     public String ObterInformacoes() {
-        // Formata a data de nascimento
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        String dataFormatada = formato.format(this.Nascimento);
-        
         return  "|| Nome: " + this.Nome 
             + "\n|| CPF: " + this.CPF 
-            + "\n|| Data de Nascimento: " + dataFormatada 
+            + "\n|| Data de Nascimento: " + Utils.data_ddMMaaaa(this.getNascimento())
             + "\n|| Email: " + this.Email 
             + "\n|| Endereco: " + this.Endereco;
     }

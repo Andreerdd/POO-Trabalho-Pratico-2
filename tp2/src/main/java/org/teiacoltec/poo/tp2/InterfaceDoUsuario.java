@@ -31,21 +31,21 @@ public class InterfaceDoUsuario {
 
             // Printa as opções
             System.out.println("""
-            Opcoes:
-            0 - Sair
-
-            ==== Pessoas ====            \s
-            1 - Criar pessoa             \s
-            2 - Remover Pessoa          \s
-            3 - Atualizar Pessoa        \s
-            4 - Listar Pessoas           \s
-
-            ==== Turmas ====           ==== Atividades ====
-            5 - Criar Turma                       9  -\s
-            6 -                        10 -
-            7 -                        11 -
-            8 -                        12 -
-           \s""");
+                                 Opcoes:                        \s
+            0 - Sair                                            \s
+                                                                \s
+            ===== Pessoas =====            ===== Turmas =====   \s
+            1 - Criar pessoa               5 - Criar Turma      \s
+            2 - Remover Pessoa             6 - Remover Turma    \s
+            3 - Atualizar Pessoa           7 - Atualizar Turma  \s
+            4 - Listar Pessoas             8 - Listar Turmas    \s
+                                                                \s
+            ===== Atividades =====       ===== Tarefas =====    \s
+            9 - Criar Atividade           13 - Criar Tarefa     \s
+            10 - Remover Atividade        14 - Remover Tarefa   \s
+            11 - Atualizar Atividade      15 - Atualizar Tarefa \s
+            12 - Listar Atividades        16 - Listar Tarefas   \s
+                                                                \s""");
 
             opcao = esperarEntrada(ENTRADA_MIN, ENTRADA_MAX);
 
@@ -134,7 +134,7 @@ public class InterfaceDoUsuario {
         int opcaoEscolhida;
 
         try {
-            opcaoEscolhida = Entrada.lerInteiro();
+            opcaoEscolhida = Entrada.lerInteiro("Opcao");
 
             // Verifica se a opção escolhida é válida
             if (opcaoEscolhida < min || opcaoEscolhida > max) {
