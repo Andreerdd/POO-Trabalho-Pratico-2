@@ -8,6 +8,7 @@ package org.teiacoltec.poo.tp2;
 import java.util.InputMismatchException;
 
 import org.teiacoltec.poo.tp2.Escola.Atividade;
+import org.teiacoltec.poo.tp2.Escola.Tarefa;
 import org.teiacoltec.poo.tp2.Escola.Turma;
 import org.teiacoltec.poo.tp2.Pessoas.Pessoa;
 
@@ -25,7 +26,7 @@ public class InterfaceDoUsuario {
         int opcao;
         do {
             // decoração
-            System.out.println("");
+            System.out.println();
             imprimirLinha(); 
 
             // Printa as opções
@@ -33,18 +34,18 @@ public class InterfaceDoUsuario {
             Opcoes:
             0 - Sair
 
-            ==== Pessoas ====             
-            1 - Criar pessoa              
-            2 - Remover Pessoa           
-            3 - Atualizar Pessoa         
-            4 - Listar Pessoas            
+            ==== Pessoas ====            \s
+            1 - Criar pessoa             \s
+            2 - Remover Pessoa          \s
+            3 - Atualizar Pessoa        \s
+            4 - Listar Pessoas           \s
 
             ==== Turmas ====           ==== Atividades ====
-            5 - Criar Turma                       9  - 
+            5 - Criar Turma                       9  -\s
             6 -                        10 -
             7 -                        11 -
             8 -                        12 -
-            """);
+           \s""");
 
             opcao = esperarEntrada(ENTRADA_MIN, ENTRADA_MAX);
 
@@ -77,6 +78,20 @@ public class InterfaceDoUsuario {
     }
 
     /**
+     * Imprime as informações de uma tarefa.
+     *
+     * @param tarefa tarefa que as informações serão impressas.
+     */
+    public static void imprimirInformacoes(Tarefa tarefa) {
+        String informacoes = tarefa.ObterInformacoes();
+
+        imprimirLinha();
+        System.out.println(Utils.embelezar(informacoes));
+        imprimirLinha();
+    }
+
+
+    /**
      * Imprime as informações de uma turma.
      * 
      * @param turma turma que as informações serão impressas.
@@ -101,6 +116,7 @@ public class InterfaceDoUsuario {
         System.out.println(Utils.embelezar(informacoes));
         imprimirLinha();
     }
+
 
     /**
      * Imprime uma linha de igual.

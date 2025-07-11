@@ -24,7 +24,7 @@ public class Utils {
     }
 
     /**
-     * Verifica se a data está dentro do período.
+     * Verifica se a data está dentro do período, incluindo o início e o fim.
      *
      * @param data A data a ser verificada
      * @param inicio A data de início do período

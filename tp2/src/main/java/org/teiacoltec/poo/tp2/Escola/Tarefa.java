@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap; // Classe HashMap (para armazenar tarefas)
 import java.util.LinkedList; // Classe LinkedList (para armazenar tarefas)
 
+import org.teiacoltec.poo.tp2.Excecoes.TarefaJaCriadaException;
 import org.teiacoltec.poo.tp2.Excecoes.TarefaNaoEncontradaException;
 import org.teiacoltec.poo.tp2.Pessoas.Aluno;
 import org.teiacoltec.poo.tp2.Utils;
@@ -61,10 +62,9 @@ public class Tarefa {
         if (Tarefas.containsKey(id)) {
             return Tarefas.get(id);
         } else {
-            throw new TarefaNaoEncontradaException("Tarefa não encontrada.", id);
+            throw new TarefaNaoEncontradaException(id);
         }
     }
-
 
 
     /**
@@ -73,7 +73,7 @@ public class Tarefa {
      * @param aluno O aluno que será usado para obter as tarefas.
      * @return Uma lista de tarefas associadas à pessoa.
      */
-    public static LinkedList<Tarefa> obterTarefasPorPessoa(Aluno aluno) {
+    public static LinkedList<Tarefa> obterTarefasDaPessoa(Aluno aluno) {
         LinkedList<Tarefa> tarefas = new LinkedList<>();
 
         // Percorre todas as tarefas e verifica se o aluno é a pessoa
@@ -97,7 +97,7 @@ public class Tarefa {
      * @param fim A data de fim do período
      * @return Uma lista de tarefas do aluno no período especificado.
      */
-    public static LinkedList<Tarefa> obterTarefasPorPessoa(Aluno aluno, Date inicio, Date fim) {
+    public static LinkedList<Tarefa> obterTarefasDaPessoa(Aluno aluno, Date inicio, Date fim) {
         LinkedList<Tarefa> tarefas = new LinkedList<>();
 
         // Percorre todas as tarefas e verifica se o aluno é a pessoa
@@ -117,9 +117,39 @@ public class Tarefa {
         return tarefas;
     }
 
+    public static void criarTarefaParaAluno(Aluno aluno, Turma turma, Atividade atividade) throws TarefaJaCriadaException {
+        // Verifica se já existe uma tarefa para o aluno e a atividade
+        for (Tarefa tarefa : Tarefas.values()) {
+            if (tarefa.Aluno.equals(aluno) && tarefa.Atividade.equals(atividade)) {
+                throw new TarefaJaCriadaException(atividade.getId(), aluno.getNome());
+            }
+        }
+
+        // Cria a tarefa
+        Tarefa tarefa = new Tarefa(aluno, turma, atividade);
+    }
+
+    /**
+     * Obtém as informacoes da tarefa.
+     *
+     * @return Uma string com as informações da tarefa.
+     */
+    public String ObterInformacoes() {
+        return    "|| ------ Informacoes da Atividade ------"
+                + "\n|| ID: " + this.Atividade.getId()
+                + "\n|| Nome: " + this.Atividade.getNome()
+                + "\n|| Descricao: " + this.Atividade.getDescricao()
+                + "|| ------ Informacoes da Tarefa ------ "
+                + "\n|| ID: " + this.ID
+                + "\n|| Turma: " + this.Turma.getNome()
+                + "\n|| Aluno:\n\t" + this.Aluno.getNome()
+                + "\n|| Nota: " + this.Nota;
+    }
 
     // Atualizar a nota da tarefa
     public void atualizarNota(float novaNota) {this.Nota = novaNota;}
     // Obter a nota da tarefa
     public float obterNota() {return this.Nota;}
+    // Obter o ID da tarefa
+    public int getID() {return this.ID;}
 }

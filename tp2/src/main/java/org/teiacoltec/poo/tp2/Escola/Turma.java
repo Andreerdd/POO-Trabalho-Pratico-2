@@ -10,18 +10,18 @@ import java.util.Date; // Classe Date
 import java.util.HashMap; // Classe HashMap (para armazenar atividades)
 import java.util.LinkedList; // Classe LinkedList (para armazenar pessoas)
 
-import org.teiacoltec.poo.tp2.Excecoes.AtividadeJaAssociadaException;
-import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
-import org.teiacoltec.poo.tp2.Excecoes.PessoaJaParticipanteException;
-import org.teiacoltec.poo.tp2.Excecoes.PessoaNaoEncontradaException;
-import org.teiacoltec.poo.tp2.Excecoes.TurmaJaEstaAssociadaException;
+import org.teiacoltec.poo.tp2.Excecoes.*;
 import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
 import org.teiacoltec.poo.tp2.Pessoas.Aluno;
 import org.teiacoltec.poo.tp2.Pessoas.Monitor;
 import org.teiacoltec.poo.tp2.Pessoas.Pessoa;
 import org.teiacoltec.poo.tp2.Pessoas.Professor;
+import org.teiacoltec.poo.tp2.Utils;
 
 public class Turma {
+
+    // Todas as turmas existentes
+    private static final HashMap<Integer, Turma> Turmas = new HashMap<>(); // Lista de turmas filhas
 
     private final int ID;
     private String Nome;
@@ -33,20 +33,39 @@ public class Turma {
     private final ArrayList<Turma> Turmas_Filhas = new ArrayList<>();
     private final HashMap<Integer, Atividade> Atividades = new HashMap<>();
 
+    // Construtor com ID
     public Turma(int id, String nome, String descricao, Date inicio, Date fim) {
         this.ID = id;
         this.Nome = nome;
         this.Descricao = descricao;
         this.Inicio = inicio;
         this.Fim = fim;
+
+        // Adiciona a turma ao hashmap de turmas
+        Turmas.put(id, this);
+    }
+
+    // Construtor sem ID
+    public Turma( String nome, String descricao, Date inicio, Date fim) {
+        int id = Turmas.size() + 1;
+
+        this.ID = id;
+        this.Nome = nome;
+        this.Descricao = descricao;
+        this.Inicio = inicio;
+        this.Fim = fim;
+
+        // Adiciona a turma ao hashmap de turmas
+        Turmas.put(id, this);
     }
 
     /**
      * Obtém uma lista dos professores da turma
-     * 
+     *
+     * @param completa se a lista deve considerar os professores de turmas filhas
      * @return lista dos professores da turma
      */
-    public LinkedList<Professor> obtemListaProfessores() {
+    public LinkedList<Professor> obtemListaProfessores(boolean completa) {
         LinkedList<Professor> professores = new LinkedList<>();
 
         // Passa por todas as pessoas, vendo se é professor
@@ -56,15 +75,31 @@ public class Turma {
             }
         }
 
+        // Se não for completa, retorna apenas os professores da turma atual
+        if (!completa) return professores;
+
+        // Se for completa, adiciona os professores das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            LinkedList<Professor> professoresFilha = turmaFilha.obtemListaProfessores(true);
+            // Olha os professores da turma filha
+            for (Professor professor : professoresFilha) {
+                // Verifica se já não adicionou
+                if (!professores.contains(professor)) {
+                    professores.add(professor);
+                }
+            }
+        }
+
         return professores;
     }
 
     /**
      * Obtém uma lista dos alunos da turma
-     * 
+     *
+     * @param completa se a lista deve considerar os alunos de turmas filhas
      * @return lista dos alunos da turma
      */
-    public LinkedList<Aluno> obtemListaAlunos() {
+    public LinkedList<Aluno> obtemListaAlunos(boolean completa) {
         LinkedList<Aluno> alunos = new LinkedList<>();
 
         // Passa por todas as pessoas, vendo se é aluno
@@ -74,21 +109,52 @@ public class Turma {
             }
         }
 
+        // Se não for completa, retorna apenas os alunos da turma atual
+        if (!completa) return alunos;
+
+        // Se for completa, adiciona os alunos das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            LinkedList<Aluno> alunosFilha = turmaFilha.obtemListaAlunos(true);
+            // Olha os alunos da turma filha
+            for (Aluno aluno : alunosFilha) {
+                // Verifica se já não adicionou
+                if (!alunos.contains(aluno)) {
+                    alunos.add(aluno);
+                }
+            }
+        }
+
         return alunos;
     }
 
     /**
      * Obtém uma lista dos monitores da turma
-     * 
+     *
+     * @param completa se a lista deve considerar os monitores de turmas filhas
      * @return lista dos monitores da turma
      */
-    public LinkedList<Monitor> obtemListaMonitor() {
+    public LinkedList<Monitor> obtemListaMonitor(boolean completa) {
         LinkedList<Monitor> monitores = new LinkedList<>();
 
         // Passa por todas as pessoas, vendo se é monitor
         for (Pessoa pessoa : this.Participantes) {
             if (pessoa instanceof Monitor monitor) {
                 monitores.add(monitor);
+            }
+        }
+
+        // Se não for completa, retorna apenas os monitores da turma atual
+        if (!completa) return monitores;
+
+        // Se for completa, adiciona os monitores das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            LinkedList<Monitor> monitoresFilha = turmaFilha.obtemListaMonitor(true);
+            // Olha os monitores da turma filha
+            for (Monitor monitor : monitoresFilha) {
+                // Verifica se já não adicionou
+                if (!monitores.contains(monitor)) {
+                    monitores.add(monitor);
+                }
             }
         }
 
@@ -115,16 +181,150 @@ public class Turma {
      * Desassocia a atividade à turma
      * 
      * @param atividade atividade que será desassociada
-     * @throws AtividadeNaoEncontradaException se a atividade não está desassociada 
+     * @throws AtividadeNaoAssociadaException se a atividade não está associada
      */
-    public void desassociaAtividade(Atividade atividade) throws AtividadeNaoEncontradaException {
+    public void desassociaAtividade(Atividade atividade) throws AtividadeNaoAssociadaException {
         // Verifica se já está desassociada
         if (!Atividades.containsKey(atividade.getId())) {
-            throw new AtividadeNaoEncontradaException(atividade.getNome(), this.getNome());
+            throw new AtividadeNaoAssociadaException(atividade.getNome(), this.getNome());
         }
 
         // Se chegou até aqui, a atividade está associada, então desassociada
         Atividades.remove(atividade.getId());
+    }
+
+    /**
+     * Obtém as atividades da turma
+     *
+     * @param completa se deve retornar as atividades de turmas filhas também
+     * @return lista de atividades da turma
+     */
+    public LinkedList<Atividade> obtemAtividadesDaTurma(boolean completa) {
+        LinkedList<Atividade> atividades = new LinkedList<>();
+
+        // Adiciona as atividades da turma atual
+        for (Atividade atividade : Atividades.values()) {
+            atividades.add(atividade);
+        }
+
+        // Se não for completa, retorna apenas as atividades da turma atual
+        if (!completa) return atividades;
+
+        // Se for completa, retorna as atividades das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            LinkedList<Atividade> atividadesFilha = turmaFilha.obtemAtividadesDaTurma(true);
+            // Adiciona as atividades da turma filha
+            for (Atividade atividade : atividadesFilha) {
+                // Verifica se já não adicionou
+                if (!atividades.contains(atividade)) {
+                    atividades.add(atividade);
+                }
+            }
+        }
+
+        return atividades;
+    }
+
+    /**
+     * Obtém as atividades da turma
+     *
+     * @param completa se deve retornar as atividades de turmas filhas também
+     * @param inicio data de início para filtrar as atividades
+     * @param fim data de fim para filtrar as atividades
+     * @return lista de atividades da turma
+     */
+    public LinkedList<Atividade> obtemAtividadesDaTurma(boolean completa, Date inicio, Date fim) {
+        LinkedList<Atividade> atividades = new LinkedList<>();
+
+        // Adiciona as atividades da turma atual
+        for (Atividade atividade : Atividades.values()) {
+            // Verifica se a atividade está no período especificado
+            if (Utils.dataNoPeriodo(atividade.getInicio(), atividade.getFim(), inicio, fim)) {
+                atividades.add(atividade);
+            }
+        }
+
+        // Se não for completa, retorna apenas as atividades da turma atual
+        if (!completa) return atividades;
+
+        // Se for completa, retorna as atividades das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            LinkedList<Atividade> atividadesFilha = turmaFilha.obtemAtividadesDaTurma(true, inicio, fim);
+            // Adiciona as atividades da turma filha
+            for (Atividade atividade : atividadesFilha) {
+                // Verifica se já não adicionou. Note que não precisamos
+                // verificar o período novamente, pois já foi verificado na turma filha
+                if (!atividades.contains(atividade)) {
+                    atividades.add(atividade);
+                }
+            }
+        }
+
+        return atividades;
+    }
+
+    /**
+     * Obtém uma turma pelo ID
+     *
+     * @param id ID da turma a ser obtida
+     * @return Turma correspondente ao ID
+     * @throws TurmaNaoEncontradaException se a turma não for encontrada
+     */
+    public static Turma obtemTurmaPorId(int id) throws TurmaNaoEncontradaException {
+        // Verifica se o ID é válido
+        if (id < 0) throw new TurmaNaoEncontradaException("Digite um ID valido.");
+
+        // Procura nas turmas filhas
+        for (Turma turma : Turmas.values()) {
+            if (turma.getId() == id) {
+                // Retorna a turma se o id for o mesmo
+                return turma;
+            }
+        }
+
+        // Se chegou até aqui, não encontrou a turma
+        throw new TurmaNaoEncontradaException(id);
+    }
+
+
+    /**
+     * Obtém uma lista de turmas onde a pessoa participa
+     *
+     * @param pessoa Pessoa a ser verificada
+     * @return Lista de turmas onde a pessoa participa
+     */
+    public static LinkedList<Turma> obtemTurmasDaPessoa(Pessoa pessoa) {
+        LinkedList<Turma> turmas = new LinkedList<>();
+
+        // Percorre todas as turmas procurando onde a pessoa participa
+        for (Turma turma : Turmas.values()) {
+            // Verifica se a pessoa participa da turma
+            if (turma.participa(pessoa)) {
+                turmas.add(turma);
+            }
+        }
+
+        return turmas;
+    }
+
+    /**
+     * Cria uma tarefa para um aluno específico pela matrícula
+     *
+     * @param matriculaAluno Matrícula do aluno para quem a tarefa será criada
+     * @param atividade Atividade que será atribuída ao aluno
+     */
+    public void criarTarefaParaAlunoPorMatricula(String matriculaAluno, Atividade atividade)
+            throws AtividadeNaoPertenceATurmaException, AlunoNaoEncontradoException, TarefaJaCriadaException {
+
+        // Obtém o aluno pelo ID
+        Aluno aluno = Aluno.obterAlunoPorMatricula(matriculaAluno);
+
+        // Verifica se a atividade pertence à turma
+        if (!this.Atividades.containsKey(atividade.getId())) {
+            throw new AtividadeNaoPertenceATurmaException(atividade.getNome(), this.Nome);
+        }
+
+        Tarefa.criarTarefaParaAluno(aluno, this, atividade);
     }
 
     private int procurarPessoa(Pessoa pessoa) throws PessoaNaoEncontradaException {
@@ -334,7 +534,8 @@ public class Turma {
         return resultado;
     }
 
-    // Sets
+
+    // Setters //
     public void setNome(String nome) {
         this.Nome = nome;
     }
@@ -356,7 +557,7 @@ public class Turma {
     }
 
 
-    // Gets
+    // Getters //
     public String getNome() {
         return this.Nome;
     }
@@ -383,6 +584,10 @@ public class Turma {
 
     public Turma getTurmaPai() {
         return this.Turma_Pai;
+    }
+
+    public static HashMap<Integer, Turma> getTurmas() {
+        return Turmas;
     }
 
 }
