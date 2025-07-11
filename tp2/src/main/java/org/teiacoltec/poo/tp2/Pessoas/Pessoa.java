@@ -148,7 +148,7 @@ public abstract class Pessoa {
             }
         }
 
-        // Converte a lista para um array, garantindo o tamanho correto
+        // Converte a lista para um array
         return matriculasList.toArray(new String[0]);
     }
 

@@ -148,6 +148,79 @@ public class Entrada {
         return entrada;
     }
 
+    /**
+     * Lê um int do usuário enquanto o usuário digitar algo
+     * dentro do vetor "entradas"
+     *
+     * @param mensagem A mensagem a ser exibida ao usuário.
+     * @param entradas Array com os ints inválidos.
+     * @return O int lido do usuário.
+     */
+    public static int lerInteiroExceto(String mensagem, int[] entradas) {
+        int entrada;
+        boolean entradaValida;
+
+        do {
+            entrada = lerInteiro(mensagem);
+            entradaValida = true;
+
+            for (int item : entradas) {
+                if (entrada == item) {
+                    entradaValida = false;
+                    if (entradas.length > 1) {
+                        System.out.println("Entrada inválida. Digite um valor diferente de: ");
+                        // Se for mais de uma entrada, exibe todas
+                        for (int invalida : entradas) {
+                            System.out.println(" - " + invalida);
+                        }
+                    } else {
+                        // Só for uma entrada
+                        System.out.println("Entrada inválida. Digite um valor diferente de " + entradas[0] + "\n");
+                    }
+                    esperaEnter();
+                    break;
+                }
+            }
+        } while (!entradaValida);
+
+        return entrada;
+    }
+
+    /**
+     * Lê um inteiro do usuário enquanto o usuário digitar algo
+     * que não esteja no vetor "entradas"
+     *
+     * @param mensagem A mensagem a ser exibida ao usuário.
+     * @param entradas Array com os inteiros válidos.
+     * @return O inteiro lido do usuário.
+     */
+    public static int lerInteiro(String mensagem, int[] entradas) {
+        int entrada;
+        boolean entradaValida = false;
+
+        do {
+            entrada = lerInteiro(mensagem);
+
+            // Verifica se a entrada está no array de entradas válidas
+            for (int item : entradas) {
+                if (entrada == item) {
+                    entradaValida = true;
+                    break;
+                }
+            }
+
+            // Se chegou até aqui, é porque a entrada é inválida
+            if (!entradaValida) {
+                System.out.println("Entrada inválida. Digite uma das opções válidas:");
+                for (int item : entradas) {
+                    System.out.println(" - " + item);
+                }
+                System.out.println(); // decoração
+            }
+        } while (!entradaValida);
+
+        return entrada;
+    }
 
     /**
      * Lê um inteiro do usuário.
@@ -175,6 +248,45 @@ public class Entrada {
 
                 String strEntrada = inScanner.nextLine();
                 entrada = Integer.parseInt(strEntrada);
+
+                // Se chegou aqui, a entrada é válida (nenhuma exceção)
+                break;
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.println("Entrada invalida. Tente novamente.\nMensagem de erro: " + e.getMessage());
+                esperaEnter();
+            }
+        } while (true);
+
+        // Só chega aqui se a entrada for válida
+        return entrada;
+    }
+
+    /**
+     * Lê um float do usuário.
+     *
+     * @param mensagem A mensagem a ser exibida ao usuário.
+     * @return O float lido do usuário.
+     */
+    public static float lerFloat(String mensagem) {
+        System.out.print(mensagem);
+        return lerFloat();
+    }
+
+    /**
+     * Lê um float do usuário.
+     *
+     * @return O float lido do usuário.
+     */
+    public static float lerFloat() {
+        float entrada;
+
+        // Loop para garantir que a entrada seja válida
+        do {
+            try {
+                System.out.print("\n: ");
+
+                String strEntrada = inScanner.nextLine();
+                entrada = Float.parseFloat(strEntrada);
 
                 // Se chegou aqui, a entrada é válida (nenhuma exceção)
                 break;

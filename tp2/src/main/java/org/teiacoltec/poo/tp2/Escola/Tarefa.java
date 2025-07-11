@@ -117,7 +117,15 @@ public class Tarefa {
         return tarefas;
     }
 
-    public static void criarTarefaParaAluno(Aluno aluno, Turma turma, Atividade atividade) throws TarefaJaCriadaException {
+    /**
+     * Cria uma tarefa para um aluno em uma turma com uma atividade específica.
+     *
+     * @param aluno O aluno que receberá a tarefa.
+     * @param turma A turma onde a tarefa será criada.
+     * @param atividade A atividade associada à tarefa.
+     * @throws TarefaJaCriadaException Se já existir uma tarefa para o aluno e a atividade.
+     */
+    public static void criarTarefa(Aluno aluno, Turma turma, Atividade atividade) throws TarefaJaCriadaException {
         // Verifica se já existe uma tarefa para o aluno e a atividade
         for (Tarefa tarefa : Tarefas.values()) {
             if (tarefa.Aluno.equals(aluno) && tarefa.Atividade.equals(atividade)) {
@@ -127,6 +135,21 @@ public class Tarefa {
 
         // Cria a tarefa
         Tarefa tarefa = new Tarefa(aluno, turma, atividade);
+    }
+
+    /**
+     * Apaga todas as tarefas associadas a uma atividade.
+     *
+     * @param atividade A atividade a ser desassociada.
+     */
+    public static void desassociarAtividade(Atividade atividade) {
+        // Percorre todas as tarefas e verifica se a atividade é a mesma
+        for (Tarefa tarefa : Tarefas.values()) {
+            // Se a atividade for a mesma, remove a tarefa
+            if (tarefa.Atividade.equals(atividade)) {
+                Tarefas.remove(tarefa.ID);
+            }
+        }
     }
 
     /**
@@ -145,6 +168,8 @@ public class Tarefa {
                 + "\n|| Aluno:\n\t" + this.Aluno.getNome()
                 + "\n|| Nota: " + this.Nota;
     }
+
+    
 
     public String toString() {
         return "\n|| Nome da Atividade: " + this.Atividade.getNome()

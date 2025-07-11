@@ -13,7 +13,6 @@ public class Aluno extends Pessoa implements Matriculado {
 
     private String Matricula;
     private String Curso;
-    private final HashMap<Integer, Tarefa> Tarefas = new HashMap<>(); // Tarefas do aluno
 
     public Aluno(String cpf, String nome, Date nascimento, String email, String endereco, String matricula, String curso) {
         super(cpf, nome, nascimento, email, endereco);
@@ -25,20 +24,18 @@ public class Aluno extends Pessoa implements Matriculado {
     @Override
     public String ObterInformacoes() {
         String informacoesTarefas = "\n|| Tarefas: ";
+        LinkedList<Tarefa> Tarefas = new LinkedList<>();
+        Tarefas.addAll(Tarefa.obterTarefasDaPessoa(this));
+
         // Verifica se o aluno tem tarefas
         if (Tarefas.isEmpty()) {
             informacoesTarefas = "Nenhuma tarefa cadastrada.";
         } else {
-            informacoesTarefas += Tarefas.values().toString();
+            informacoesTarefas += Tarefas.toString();
         }
         return super.ObterInformacoes("Aluno")
             + "\n|| Matricula: " + this.Matricula 
             + "\n|| Curso: " + this.Curso;
-    }
-
-    public void adicionarTarefa(Tarefa tarefa) {
-        // Adiciona a tarefa ao HashMap de tarefas do aluno
-        Tarefas.put(tarefa.getID(), tarefa);
     }
 
     /**
@@ -56,8 +53,7 @@ public class Aluno extends Pessoa implements Matriculado {
             com alunos poderia ser confuso e poderia gerar erros, abri
             essa exceção. */
             // Verifica se a pessoa é um aluno
-            if (pessoa instanceof Aluno) {
-                Aluno temp = (Aluno) pessoa;
+            if (pessoa instanceof Aluno temp) {
                 alunos.put(temp.getMatricula(), temp);
             }
         }
@@ -84,7 +80,13 @@ public class Aluno extends Pessoa implements Matriculado {
         return novo;
     }
 
-
+    /**
+     * Obtém um aluno pelo número de matrícula.
+     *
+     * @param matricula A matrícula do aluno a ser buscado.
+     * @return O aluno correspondente à matrícula fornecida.
+     * @throws AlunoNaoEncontradoException Se o aluno não for encontrado.
+     */
     public static Aluno obterAlunoPorMatricula(String matricula) throws AlunoNaoEncontradoException {
         // Obtém os alunos
         HashMap<String, Aluno> Alunos = obterAlunos();

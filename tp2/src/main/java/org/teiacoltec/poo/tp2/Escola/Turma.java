@@ -10,6 +10,7 @@ import java.util.Date; // Classe Date
 import java.util.HashMap; // Classe HashMap (para armazenar atividades)
 import java.util.LinkedList; // Classe LinkedList (para armazenar pessoas)
 
+import org.teiacoltec.poo.tp2.Entrada;
 import org.teiacoltec.poo.tp2.Excecoes.*;
 import org.teiacoltec.poo.tp2.InterfaceDoUsuario;
 import org.teiacoltec.poo.tp2.Pessoas.Aluno;
@@ -19,6 +20,10 @@ import org.teiacoltec.poo.tp2.Pessoas.Professor;
 import org.teiacoltec.poo.tp2.Utils;
 
 public class Turma {
+
+    // o "0" não pode ser usado pois pode
+    // ser usado para sair, por exemplo
+    private static final int ID_PROIBIDO = 0;
 
     // Todas as turmas existentes
     private static final HashMap<Integer, Turma> Turmas = new HashMap<>(); // Lista de turmas filhas
@@ -202,10 +207,8 @@ public class Turma {
     public LinkedList<Atividade> obtemAtividadesDaTurma(boolean completa) {
         LinkedList<Atividade> atividades = new LinkedList<>();
 
-        // Adiciona as atividades da turma atual
-        for (Atividade atividade : Atividades.values()) {
-            atividades.add(atividade);
-        }
+        // Adiciona todas as atividades da turma atual
+        atividades.addAll(Atividades.values());
 
         // Se não for completa, retorna apenas as atividades da turma atual
         if (!completa) return atividades;
@@ -324,7 +327,148 @@ public class Turma {
             throw new AtividadeNaoPertenceATurmaException(atividade.getNome(), this.Nome);
         }
 
-        Tarefa.criarTarefaParaAluno(aluno, this, atividade);
+        Tarefa.criarTarefa(aluno, this, atividade);
+    }
+
+    /**
+     * Cria uma turma com as informações fornecidas pelo usuário
+     *
+     * @return a nova turma criada
+     */
+    public static Turma criarTurma() {
+
+        // Pede as informações da turma
+        String nome = Entrada.lerString("Digite o nome da turma");
+        String descricao = Entrada.lerString("Digite a descricao da turma");
+        Date inicio = Entrada.lerData("Digite a data de inicio da turma");
+        Date fim = Entrada.lerData("Digite a data de fim da turma");
+
+        // Pergunta se o usuário quer criar a turma com ID ou sem ID
+        int id;
+
+        String resposta = Entrada.lerString("Deseja definir o ID da turma? (S/N)", new String[]{"S", "N"}).toUpperCase();
+        if (resposta.equals("S")) {
+            // Se sim, pede o ID
+            int[] ids = Turma.obterTodosIdsTurmas();
+            id = Entrada.lerInteiroExceto("Digite o ID da turma", ids);
+        } else {
+            // Se não, define o ID automaticamente
+            id = 0;
+
+            // Incrementa o ID até encontrar um que não esteja em uso
+            do {
+                id++;
+            } while (Turmas.containsKey(id)); // Verifica se o ID já está em uso
+        }
+
+        return new Turma(id, nome, descricao, inicio, fim);
+    }
+
+    /**
+     * Obtém os nomes de todas as turmas
+     *
+     * @return um array de strings contendo os nomes das turmas
+     */
+    public static String[] obterTodosNomesTurmas() {
+        // Cria uma lista para armazenar os nomes das turmas
+        LinkedList<String> nomesTurmas = new LinkedList<>();
+
+        // Adiciona o nome de cada turma à lista
+        for (Turma turma : Turmas.values()) {
+            nomesTurmas.add(turma.getNome());
+        }
+
+        // Converte a lista para um array e retorna
+        return nomesTurmas.toArray(new String[0]);
+    }
+
+    /**
+     * Obtém os nomes de todas as turmas, exceto a turma com o nome especificado
+     *
+     * @param excecao o nome da turma que deve ser ignorado
+     * @return um array de strings contendo os nomes das turmas, exceto a exceção
+     */
+    public static String[] obterTodosNomesTurmas(String excecao) {
+        // Cria uma lista para armazenar os nomes das turmas
+        LinkedList<String> nomesTurmas = new LinkedList<>();
+
+        // Adiciona o nome de cada turma à lista
+        for (Turma turma : Turmas.values()) {
+            // Verifica se o nome da turma é diferente da exceção
+            if (turma.getNome().equals(excecao)) continue; // Se for igual, pula
+            nomesTurmas.add(turma.getNome());
+        }
+
+        // Converte a lista para um array e retorna
+        return nomesTurmas.toArray(new String[0]);
+    }
+
+    /**
+     * Obtém os IDs de todas as turmas
+     *
+     * @return um array de inteiros contendo os IDs das turmas
+     */
+    public static int[] obterTodosIdsTurmas() {
+        // Cria uma lista para armazenar os IDs das turmas
+        LinkedList<Integer> idsTurmas = new LinkedList<>();
+
+        // Adiciona o ID proibido
+        idsTurmas.add(ID_PROIBIDO);
+
+        // Adiciona o ID de cada turma à lista
+        for (Turma turma : Turmas.values()) {
+            idsTurmas.add(turma.getId());
+        }
+
+        // Converte a lista para um array e retorna
+        // Obs.: poderia ter feito um for, por exemplo,
+        //       mas assim é mais elegante :)
+        return idsTurmas.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    /**
+     * Obtém os IDs de todas as turmas
+     *
+     * @param excecao o ID da turma que deve ser ignorado
+     * @return um array de inteiros contendo os IDs das turmas
+     */
+    public static int[] obterTodosIdsTurmas(int excecao) {
+        // Cria uma lista para armazenar os IDs das turmas
+        LinkedList<Integer> idsTurmas = new LinkedList<>();
+
+        // Adiciona o ID proibido
+        idsTurmas.add(ID_PROIBIDO);
+
+        // Adiciona o ID de cada turma à lista
+        for (Turma turma : Turmas.values()) {
+            // Verifica se o ID da turma é diferente da exceção
+            if (turma.getId() == excecao) continue; // Se for igual, pula
+            idsTurmas.add(turma.getId());
+        }
+
+        // Converte a lista para um array e retorna
+        return idsTurmas.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private void desassociarMinhasFilhas() {
+        // Desassocia as turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            turmaFilha.setTurmaPai(null); // Remove a referência à turma pai
+        }
+        this.Turmas_Filhas.clear(); // Limpa a lista de turmas filhas
+    }
+
+    public static void apagarTurmaDaLista(Turma turma) throws TurmaNaoEncontradaException {
+        // Verifica se a turma existe
+        if (Turmas.containsKey(turma.getId())) {
+            // Desassocia as filhas
+            turma.desassociarMinhasFilhas();
+            // Remove a turma
+            Turmas.remove(turma.getId());
+        } else {
+            // Se não existir, lança uma exceção
+            throw new TurmaNaoEncontradaException(turma.getId());
+        }
     }
 
     private int procurarPessoa(Pessoa pessoa) throws PessoaNaoEncontradaException {

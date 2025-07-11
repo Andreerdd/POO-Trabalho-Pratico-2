@@ -56,6 +56,16 @@ public class InterfaceDoUsuario {
                 case 3 -> FuncoesMenu.atualizarPessoa();
                 case 4 -> FuncoesMenu.listarPessoas();
 
+                case 5 -> FuncoesMenu.criarTurma();
+                case 6 -> FuncoesMenu.removerTurma();
+                case 7 -> FuncoesMenu.atualizarTurma();
+                case 8 -> FuncoesMenu.listarTurmas();
+
+                case 9 -> FuncoesMenu.criarAtividade();
+                case 10 -> FuncoesMenu.removerAtividade();
+                case 11 -> FuncoesMenu.atualizarAtividade();
+                case 12 -> FuncoesMenu.listarAtividades();
+
                 case 0 -> System.out.println("Saiu do programa.");
                 
                 // Não precisa contar com isso
