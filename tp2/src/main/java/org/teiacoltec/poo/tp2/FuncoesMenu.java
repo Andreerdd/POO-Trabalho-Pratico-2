@@ -19,11 +19,11 @@ public class FuncoesMenu extends InterfaceDoUsuario {
         try {
             Pessoa pessoa = Pessoa.obtemPessoaPorCPF(cpf);
             Pessoa.apagarPessoaDaLista(pessoa);
-            System.out.println("Pessoa com CPF %s apagada com sucesso.".formatted(cpf));
+            System.out.printf("Pessoa com CPF %s apagada com sucesso.\n", cpf);
         } catch (PessoaForaDaListaException e) {
-            System.out.println("A pessoa com CPF %s esta fora da lista.".formatted(cpf));
+            System.out.printf("A pessoa com CPF %s esta fora da lista.\n", cpf);
         } catch (PessoaNaoEncontradaException e) {
-            System.out.println("A pessoa com CPF %s nao foi encontrada.".formatted(cpf));
+            System.out.printf("A pessoa com CPF %s nao foi encontrada.\n", cpf);
         }
         Entrada.esperaEnter();
     }

@@ -9,6 +9,7 @@ import java.util.Date; // Classe Date
 import java.util.HashMap; // Classe SimpleDateFormat (para formatar a data)
 
 import org.teiacoltec.poo.tp2.Excecoes.AtividadeNaoEncontradaException;
+import org.teiacoltec.poo.tp2.Pessoas.Aluno;
 
 public class Atividade {
     // Todas as atividades existentes
@@ -60,7 +61,7 @@ public class Atividade {
         // Se chegou até aqui, é porque a atividade não foi encontrada
         throw new AtividadeNaoEncontradaException("Nao encontrou a atividade na lista da turma " + this.getNome(), id);
     }
-
+    
     // Obtém as informações da atividade
     public String ObterInformacoes() {
 
