@@ -26,7 +26,7 @@ public class Aluno extends Pessoa implements Matriculado {
         String informacoesTarefas = "\n|| Tarefas: ";
         LinkedList<Tarefa> Tarefas = new LinkedList<>();
         Tarefas.addAll(Tarefa.obterTarefasDaPessoa(this));
-
+        
         // Verifica se o aluno tem tarefas
         if (Tarefas.isEmpty()) {
             informacoesTarefas = "Nenhuma tarefa cadastrada.";
@@ -78,7 +78,7 @@ public class Aluno extends Pessoa implements Matriculado {
 
         // Retorna o aluno criado
         return novo;
-    }
+    }   
 
     /**
      * Obtém um aluno pelo número de matrícula.

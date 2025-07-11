@@ -79,7 +79,7 @@ public class Atividade {
              + "\n|| Descricao:\n\t" + this.Descricao
              + "\n|| Valor: " + this.Valor
              + "\n|| Data de Inicio: " + inicioFormatado 
-             + "\n|| Data de Fim: " + fimFormatado;
+             + "\n|| Data de Fim: " + fimFormatado + "\n";
     }
 
     /**
@@ -95,7 +95,7 @@ public class Atividade {
         Date fim = Entrada.lerData("Digite a data de fim da atividade");
         float valor = Entrada.lerFloat("Digite o Valor da atividade");
 
-        // Pergunta se o usuário quer criar uma atividade com ID ou sem ID
+        // Pergunta se o usuário quer criar uma atividade ditando o ID
         int id;
 
         String resposta = Entrada.lerString("Deseja definir o ID da atividade? (S/N)", new String[]{"S", "N"}).toUpperCase();

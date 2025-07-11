@@ -2,5 +2,7 @@
 *.ser
 *.class
 
-# Pasta do vscode
+# Pastas aleatórias
 ./vscode
+./idea
+./out

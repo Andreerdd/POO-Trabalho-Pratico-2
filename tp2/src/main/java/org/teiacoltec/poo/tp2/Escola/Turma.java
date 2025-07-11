@@ -50,6 +50,19 @@ public class Turma {
         Turmas.put(id, this);
     }
 
+    // Construtor com ID e pai
+    public Turma(int id, String nome, String descricao, Date inicio, Date fim, Turma pai) {
+        this.ID = id;
+        this.Nome = nome;
+        this.Descricao = descricao;
+        this.Inicio = inicio;
+        this.Fim = fim;
+        this.Turma_Pai = pai;
+
+        // Adiciona a turma ao hashmap de turmas
+        Turmas.put(id, this);
+    }
+
     // Construtor sem ID
     public Turma( String nome, String descricao, Date inicio, Date fim) {
         int id = Turmas.size() + 1;
@@ -267,6 +280,41 @@ public class Turma {
     }
 
     /**
+     * Obtém os IDs das atividades da turma
+     *
+     * @return um array de inteiros contendo os IDs das atividades
+     */
+    public int[] obtemIdAtividadesDaTurma(boolean completa) {
+        LinkedList<Integer> idsAtividades = new LinkedList<>();
+
+        // Adiciona o ID de cada atividade à lista
+        for (Atividade atividade : Atividades.values()) {
+            idsAtividades.add(atividade.getId());
+        }
+
+        // Se não for completa, retorna apenas os IDs das atividades da turma atual
+        // Obs.: poderia ter feito um for, por exemplo, mas assim é mais elegante :)
+        if (!completa) return idsAtividades.stream().mapToInt(Integer::intValue).toArray();
+
+        // Se for completa, retorna os IDs das atividades das turmas filhas
+        for (Turma turmaFilha : this.Turmas_Filhas) {
+            int[] idsAtividadesFilha = turmaFilha.obtemIdAtividadesDaTurma(true);
+            // Adiciona os IDs das atividades da turma filha
+            for (int id : idsAtividadesFilha) {
+                // Verifica se já não adicionou
+                if (!idsAtividades.contains(id)) {
+                    idsAtividades.add(id);
+                }
+            }
+        }
+
+        // Retorna as atividades
+        return idsAtividades.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    
+
+    /**
      * Obtém uma turma pelo ID
      *
      * @param id ID da turma a ser obtida
@@ -343,7 +391,7 @@ public class Turma {
         Date inicio = Entrada.lerData("Digite a data de inicio da turma");
         Date fim = Entrada.lerData("Digite a data de fim da turma");
 
-        // Pergunta se o usuário quer criar a turma com ID ou sem ID
+        // Pergunta se o usuário quer criar a turma ditando o ID
         int id;
 
         String resposta = Entrada.lerString("Deseja definir o ID da turma? (S/N)", new String[]{"S", "N"}).toUpperCase();
@@ -665,6 +713,26 @@ public class Turma {
                         
                         --------------------
                         || Nao possui alunos ou professores.""";
+            }
+
+            // Imprime as atividades da turma se tiverem
+            if (!this.Atividades.isEmpty()) {
+                String atividades = "";
+
+                // Obtém as atividades
+                for (Atividade atividade : this.Atividades.values()) {
+                    atividades += "\n||\t" + atividade.getNome() + " (ID: " + atividade.getId() + ")";
+                }
+
+                resultado += """
+                        
+                        --------------------
+                        || Atividades da turma:%s""".formatted(atividades);
+            } else {
+                resultado += """
+                        
+                        --------------------
+                        || Nao possui atividades associadas.""";
             }
         }
         

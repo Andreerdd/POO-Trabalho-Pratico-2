@@ -288,11 +288,220 @@ public class FuncoesMenu extends InterfaceDoUsuario {
 
         Entrada.esperaEnter();
     }
-    
+
+    public static void associarAtividadeATurma() {
+        int[] idsAtividade = Atividade.obterTodosIdsAtividades();
+        int idAtividade = Entrada.lerInteiro("Digite o id da atividade que deseja associar", idsAtividade);
+
+        try {
+            Atividade atividade = Atividade.obtemAtividadePorId(idAtividade);
+            int[] idsTurma = Turma.obterTodosIdsTurmas();
+            int idTurma = Entrada.lerInteiro("Digite o id da turma que deseja associar a atividade", idsTurma);
+
+            Turma turma = Turma.obtemTurmaPorId(idTurma);
+            try {
+                turma.associaAtividade(atividade);
+                System.out.printf("Atividade \"%s\" (ID: %d) associada com sucesso a turma \"%s\" (ID: %d).\n",
+                        atividade.getNome(), idAtividade, turma.getNome(), idTurma);
+            } catch (AtividadeJaAssociadaException e) {
+                System.out.printf("A atividade \"%s\" (ID: %d) ja esta associada a turma \"%s\" (ID: %d).\n",
+                        atividade.getNome(), idAtividade, turma.getNome(), idTurma);
+            }
+        } catch (AtividadeNaoEncontradaException e) {
+            System.out.printf("A atividade com id %d nao foi encontrada.\n", idAtividade);
+        } catch (TurmaNaoEncontradaException e) {
+            System.out.printf("A turma com id %d nao foi encontrada.\n", idAtividade);
+        }
+        Entrada.esperaEnter();
+    }
+
+    public static void desassociarAtividadeDaTurma() {
+        int[] idsAtividade = Atividade.obterTodosIdsAtividades();
+        int idAtividade = Entrada.lerInteiro("Digite o id da atividade que deseja desassociar", idsAtividade);
+
+        try {
+            Atividade atividade = Atividade.obtemAtividadePorId(idAtividade);
+            int[] idsTurma = Turma.obterTodosIdsTurmas();
+            int idTurma = Entrada.lerInteiro("Digite o id da turma que deseja desassociar a atividade", idsTurma);
+
+            Turma turma = Turma.obtemTurmaPorId(idTurma);
+            try {
+                turma.desassociaAtividade(atividade);
+                System.out.printf("Atividade \"%s\" (ID: %d) desassociada com sucesso da turma \"%s\" (ID: %d).\n",
+                        atividade.getNome(), idAtividade, turma.getNome(), idTurma);
+            } catch (AtividadeNaoAssociadaException e) {
+                System.out.printf("A atividade \"%s\" (ID: %d) nao esta associada a turma \"%s\" (ID: %d).\n",
+                        atividade.getNome(), idAtividade, turma.getNome(), idTurma);
+            }
+        } catch (AtividadeNaoEncontradaException e) {
+            System.out.printf("A atividade com id %d nao foi encontrada.\n", idAtividade);
+        } catch (TurmaNaoEncontradaException e) {
+            System.out.printf("A turma com id %d nao foi encontrada.\n", idAtividade);
+        }
+        Entrada.esperaEnter();
+    }
     // //
 
+    public static void criarTarefa() {
+        // Verifica se existem alunos (de um jeito feio, mas funcional)
+        if (Pessoa.getPessoas().values().stream().noneMatch(p -> p instanceof Aluno)) {
+            System.out.println("Nao e possivel criar uma tarefa: nao existem alunos cadastrados.");
+            Entrada.esperaEnter();
+            return;
+        }
+
+        // Verifica se existem turmas
+        if (Turma.getTurmas().isEmpty()) {
+            System.out.println("Nao e possivel criar uma tarefa: nao existem turmas cadastradas.");
+            Entrada.esperaEnter();
+            return;
+        }
+
+        // Verifica se existem atividades
+        if (Atividade.getAtividades().isEmpty()) {
+            System.out.println("Nao e possivel criar uma tarefa: nao existem atividades cadastradas.");
+            Entrada.esperaEnter();
+            return;
+        }
+
+        // Se chegou até aqui, é porque existem alunos e atividades cadastradas
+        Tarefa tarefa = Tarefa.criarTarefa();
+        if (tarefa == null) {
+            System.out.println("Nao foi possivel criar a tarefa. Verifique se a atividade existe e se ha pessoas cadastradas.");
+            Entrada.esperaEnter();
+            return;
+        }
+        System.out.println("Tarefa criada com as informacoes:");
+        imprimirInformacoes(tarefa);
+
+        Entrada.esperaEnter();
+    }
+
+    public static void removerTarefa() {
+        // Pergunta se quer remover uma tarefa ou as tarefas de uma atividade
+        System.out.println("""
+                Deseja remover uma tarefa ou as tarefas de uma atividade?
+                0 - Sair
+                1 - Remover uma tarefa
+                2 - Remover as tarefas de uma atividade
+                """);
+        int opcao = Entrada.lerInteiro("Digite a opcao desejada", new int[]{0, 1, 2});
+        if (opcao == 0) return;
+
+        if (opcao == 1) {
+            int[] idsTarefa = Tarefa.obterTodosIdsTarefas();
+            int id = Entrada.lerInteiro("Digite o id da tarefa que deseja apagar", idsTarefa);
+            try {
+                Tarefa tarefa = Tarefa.obtemTarefaPorId(id);
+                Tarefa.apagarTarefaDaLista(tarefa);
+                System.out.printf("Tarefa com id %d apagada com sucesso.\n", id);
+            } catch (TarefaNaoEncontradaException e) {
+                System.out.printf("A tarefa com id %d nao foi encontrada.\n", id);
+            }
+            Entrada.esperaEnter();
+        } else {
+            int[] idsAtividade = Atividade.obterTodosIdsAtividades();
+            int id = Entrada.lerInteiro("Digite o id da atividade cujas tarefas deseja apagar", idsAtividade);
+
+            try {
+                Atividade atividade = Atividade.obtemAtividadePorId(id);
+                Tarefa.apagarTarefasDaAtividade(atividade);
+                System.out.printf("Todas as tarefas da atividade \"%s\" (ID: %d) foram apagadas com sucesso.\n", atividade.getNome(), id);
+            } catch (AtividadeNaoEncontradaException e) {
+                System.out.printf("A atividade com id %d nao foi encontrada.\n", id);
+            }
+        }
+
+    }
+
+    public static void atualizarTarefa() {
+        // Pergunta se quer atualizar uma tarefa ou todas as tarefas de uma atividade
+        System.out.println("""
+                Deseja atualizar uma tarefa ou as tarefas de uma atividade?
+                0 - Sair
+                1 - Atualizar uma tarefa
+                2 - Atualizar as tarefas de uma atividade
+                """);
+        int opcaoGeral = Entrada.lerInteiro("Digite a opcao desejada", new int[]{0, 1, 2});
+        if (opcaoGeral == 0) return;
+
+        if (opcaoGeral == 1) {
+            int[] idsTarefa = Tarefa.obterTodosIdsTarefas();
+            int id = Entrada.lerInteiro("Digite o id da tarefa que deseja atualizar", idsTarefa);
+
+            try {
+                Tarefa tarefa = Tarefa.obtemTarefaPorId(id);
+                float nota;
+
+                int opcao;
+                do {
+                    nota = tarefa.getNota();
+
+                    System.out.println("""
+                        Qual atributo deseja alterar?
+                        0 - Sair
+                        1 - Nota (%.2f)
+                        """.formatted(nota));
+
+                    opcao = Entrada.lerInteiro("Opcao");
+
+                    switch (opcao) {
+                        case 1 -> tarefa.setNota(Entrada.lerFloat("Digite a nova nota"));
+                        case 0 -> System.out.println("Saiu da atualizacao.");
+                        default -> System.out.println("Opcao invalida!");
+                    }
+                } while (opcao != 0);
+
+            } catch (TarefaNaoEncontradaException e) {
+                System.out.printf("A tarefa com id %d nao foi encontrada.\n", id);
+            }
+            Entrada.esperaEnter();
+        } else {
+            int[] idsAtividade = Atividade.obterTodosIdsAtividades();
+            int id = Entrada.lerInteiro("Digite o id da atividade cujas tarefas deseja atualizar", idsAtividade);
+
+            try {
+                Atividade atividade = Atividade.obtemAtividadePorId(id);
+
+                int opcao;
+                do {
+                    System.out.println("""
+                        Qual atributo deseja alterar em todas?
+                        0 - Sair
+                        1 - Nota
+                        """);
+
+                    opcao = Entrada.lerInteiro("Opcao");
+
+                    switch (opcao) {
+                        case 1 -> {
+                            float novaNota = Entrada.lerFloat("Digite a nova nota");
+                            Tarefa.atualizarNotasDasTarefasDaAtividade(atividade, novaNota);
+                            System.out.printf("Todas as notas das tarefas da atividade \"%s\" (ID: %d) foram atualizadas com sucesso.\n",
+                                    atividade.getNome(), id);
+                        }
+                        case 0 -> System.out.println("Saiu da atualizacao.");
+                        default -> System.out.println("Opcao invalida!");
+                    }
+                } while (opcao != 0);
+
+            } catch (AtividadeNaoEncontradaException e) {
+                System.out.printf("A atividade com id %d nao foi encontrada.\n", id);
+            }
+        }
+    }
+
+    public static void listarTarefas() {
+        for (Tarefa t : Tarefa.getTarefas()) {
+            imprimirInformacoes(t);
+        }
+
+        Entrada.esperaEnter();
+    }
+
+
     // Métodos privados //
-    
+
     private static String getAtributoExtra(Pessoa pessoa) {
         String atributoExtra = "6 - ";
 

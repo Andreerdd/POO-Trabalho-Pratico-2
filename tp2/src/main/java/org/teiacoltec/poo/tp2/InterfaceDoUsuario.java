@@ -41,10 +41,12 @@ public class InterfaceDoUsuario {
             4 - Listar Pessoas             8 - Listar Turmas    \s
                                                                 \s
             ===== Atividades =====         ===== Tarefas =====  \s
-            9 - Criar Atividade            13 - Criar Tarefa    \s
-            10 - Remover Atividade         14 - Remover Tarefa  \s
-            11 - Atualizar Atividade       15 - Atualizar Tarefa\s
-            12 - Listar Atividades         16 - Listar Tarefas  \s
+            9 - Criar Atividade            15 - Criar Tarefa    \s
+            10 - Remover Atividade         16 - Remover Tarefa  \s
+            11 - Atualizar Atividade       17 - Atualizar Tarefa\s
+            12 - Listar Atividades         18 - Listar Tarefas  \s
+            13 - Associar Atividade                             \s
+            14 - Desassociar Atividade                          \s
                                                                 \s""");
 
             opcao = esperarEntrada(ENTRADA_MIN, ENTRADA_MAX);
@@ -65,6 +67,13 @@ public class InterfaceDoUsuario {
                 case 10 -> FuncoesMenu.removerAtividade();
                 case 11 -> FuncoesMenu.atualizarAtividade();
                 case 12 -> FuncoesMenu.listarAtividades();
+                case 13 -> FuncoesMenu.associarAtividadeATurma();
+                case 14 -> FuncoesMenu.desassociarAtividadeDaTurma();
+
+                case 15 -> FuncoesMenu.criarTarefa();
+                case 16 -> FuncoesMenu.removerTarefa();
+                case 17 -> FuncoesMenu.atualizarTarefa();
+                case 18 -> FuncoesMenu.listarTarefas();
 
                 case 0 -> System.out.println("Saiu do programa.");
                 
