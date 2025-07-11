@@ -263,7 +263,7 @@ public abstract class Pessoa {
     }
 
     public Date getNascimento() {
-        return this.Nascimento;
+        return (this.Nascimento != null) ? (Date) this.Nascimento.clone() : null;
     }
 
     public String getCPF() { return this.CPF; }
